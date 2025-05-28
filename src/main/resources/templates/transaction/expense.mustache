@@ -1,0 +1,25 @@
+<section class="expense-table">
+    <h4>Expenses</h4>
+    <table>
+        <thead>
+        <tr>
+            <th>Transaction</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Payment Method</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#expenses}}
+            <tr>
+                <td>{{description}}</td>
+                <td>{{amount}}</td>
+                <td>{{category}}</td>
+                <td>{{paymentMethod}}</td>
+                <td>{{date}}</td>
+            </tr>
+        {{/expenses}}
+        </tbody>
+    </table>
+</section>

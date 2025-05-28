@@ -1,0 +1,23 @@
+<section class="income-table">
+    <h4>Incomes</h4>
+    <table>
+        <thead>
+        <tr>
+            <th>Transaction</th>
+            <th>Amount</th>
+            <th>Source</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#incomes}}
+            <tr>
+                <td>{{description}}</td>
+                <td>{{amount}}</td>
+                <td>{{source}}</td>
+                <td>{{date}}</td>
+            </tr>
+        {{/incomes}}
+        </tbody>
+    </table>
+</section>

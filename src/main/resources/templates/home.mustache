@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Money Tracker</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+{{> layout/header}}
+
+<main class="container">
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <button class="btn btn-red">New Expense</button>
+        <button class="btn btn-green">New Income</button>
+        <button class="btn btn-yellow">New Transaction</button>
+    </div>
+
+    {{> board/subscriptions}}
+    {{> board/account}}
+
+    <div class="transactions">
+        {{> transaction/expense}}
+        {{> transaction/incomes}}
+        {{> transaction/transfer}}
+    </div>
+
+    {{> board/categories}}
+</main>
+
+{{> layout/footer}}
+</body>
+</html>

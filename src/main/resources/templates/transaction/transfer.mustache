@@ -1,0 +1,23 @@
+<section class="transfer-table">
+    <h4>Transfers</h4>
+    <table>
+        <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#transfers}}
+            <tr>
+                <td>{{from}}</td>
+                <td>{{to}}</td>
+                <td>{{amount}}</td>
+                <td>{{date}}</td>
+            </tr>
+        {{/transfers}}
+        </tbody>
+    </table>
+</section>
