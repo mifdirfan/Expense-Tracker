@@ -1,23 +1,23 @@
-<section class="income-table">
-    <h4>Incomes</h4>
+{{>layout/header}}
+
+<div class="container">
+    <h2>Incomes</h2>
     <table>
         <thead>
         <tr>
-            <th>Transaction</th>
-            <th>Amount</th>
             <th>Source</th>
+            <th>Amount</th>
             <th>Date</th>
         </tr>
         </thead>
         <tbody>
-        {{#incomes}}
-            <tr>
-                <td>{{description}}</td>
-                <td>{{amount}}</td>
-                <td>{{source}}</td>
-                <td>{{date}}</td>
-            </tr>
-        {{/incomes}}
+        <tr>
+            <td>Salary</td>
+            <td>$3,000</td>
+            <td>2025-06-01</td>
+        </tr>
         </tbody>
     </table>
-</section>
+</div>
+
+{{>layout/footer}}

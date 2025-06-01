@@ -1,9 +1,42 @@
-<section class="subscriptions">
-    <h3>Subscriptions</h3>
-    <div class="subscription-card">
-        <p><strong>{{name}}</strong></p>
-        <p>{{price}}</p>
-        <p>{{interval}}</p>
-        <p>{{lastPaid}}</p>
-    </div>
-</section>
+{{>layout/header}}
+
+<h2>Subscriptions</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Due</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#subsList}}
+        <tr>
+            <th>{{id}}</th>
+            <td><a href="/subscriptions/{{id}}">{{Name}}</a></td>
+            <td><a href="/subscriptions/{{id}}">{{Amount}}</a></td>
+            <td><a href="/subscriptions/{{id}}">{{Due}}</a></td>
+        </tr>
+    {{/subsList}}
+    </tbody>
+</table>
+
+
+
+{{>layout/footer}}
+
+<!--<div class="container">-->
+<!--    <h2>Subscriptions</h2>-->
+<!--    <div class="subscription-card">-->
+<!--        <h3>Netflix</h3>-->
+<!--        <p>Amount: $15</p>-->
+<!--        <p>Due: 15th every month</p>-->
+<!--    </div>-->
+<!--    <div class="subscription-card">-->
+<!--        <h3>Spotify</h3>-->
+<!--        <p>Amount: $10</p>-->
+<!--        <p>Due: 1st every month</p>-->
+<!--    </div>-->
+<!--</div>-->
+

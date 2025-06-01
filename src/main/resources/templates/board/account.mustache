@@ -1,11 +1,15 @@
-<section class="accounts">
-    <h3>Accounts</h3>
-    {{#accounts}}
-        <div class="account-card">
-            <p><strong>{{name}}</strong></p>
-            <p>Balance: {{balance}}</p>
-            <p>Incomes: {{incomes}}</p>
-            <p>Expenses: {{expenses}}</p>
-        </div>
-    {{/accounts}}
-</section>
+{{>layout/header}}
+
+<div class="container">
+    <h2>Accounts</h2>
+    <div class="account-card">
+        <h3>Main Bank</h3>
+        <p>Balance: $1,200.00</p>
+    </div>
+    <div class="account-card">
+        <h3>Cash</h3>
+        <p>Balance: $350.00</p>
+    </div>
+</div>
+
+{{>layout/footer}}

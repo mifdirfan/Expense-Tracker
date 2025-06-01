@@ -1,25 +1,25 @@
-<section class="expense-table">
-    <h4>Expenses</h4>
+{{>layout/header}}
+
+<div class="container">
+    <h2>Expenses</h2>
     <table>
         <thead>
         <tr>
-            <th>Transaction</th>
+            <th>Description</th>
             <th>Amount</th>
-            <th>Category</th>
-            <th>Payment Method</th>
             <th>Date</th>
+            <th>Category</th>
         </tr>
         </thead>
         <tbody>
-        {{#expenses}}
-            <tr>
-                <td>{{description}}</td>
-                <td>{{amount}}</td>
-                <td>{{category}}</td>
-                <td>{{paymentMethod}}</td>
-                <td>{{date}}</td>
-            </tr>
-        {{/expenses}}
+        <tr>
+            <td>Lunch</td>
+            <td>$12</td>
+            <td>2025-06-01</td>
+            <td>Food & Drinks</td>
+        </tr>
         </tbody>
     </table>
-</section>
+</div>
+
+{{>layout/footer}}

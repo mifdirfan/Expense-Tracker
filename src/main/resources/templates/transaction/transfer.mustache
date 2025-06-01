@@ -1,5 +1,7 @@
-<section class="transfer-table">
-    <h4>Transfers</h4>
+{{>layout/header}}
+
+<div class="container">
+    <h2>Transfers</h2>
     <table>
         <thead>
         <tr>
@@ -10,14 +12,14 @@
         </tr>
         </thead>
         <tbody>
-        {{#transfers}}
-            <tr>
-                <td>{{from}}</td>
-                <td>{{to}}</td>
-                <td>{{amount}}</td>
-                <td>{{date}}</td>
-            </tr>
-        {{/transfers}}
+        <tr>
+            <td>Bank</td>
+            <td>Cash</td>
+            <td>$200</td>
+            <td>2025-06-01</td>
+        </tr>
         </tbody>
     </table>
-</section>
+</div>
+
+{{>layout/footer}}
