@@ -1,12 +1,24 @@
+<body class="d-flex flex-column min-vh-100">
+
 {{> layout/header}}
 
-<div class="container">
-    <nav class="quick-actions">
+<div class="d-flex flex-grow-1">
+    <!-- Sidebar -->
+    <nav class="bg-body-tertiary p-3" style="min-width: 200px;">
         <h4>Quick Actions</h4>
-        <button type="button" class="btn btn-outline-danger">New Expense</button><br/>
-        <button type="button" class="btn btn-outline-success">New Income</button><br/>
-        <button type="button" class="btn btn-outline-warning">New Transfer</button>
+        <div class="d-flex flex-column gap-2">
+            <button class="btn btn-outline-danger" type="button">New Expense</button>
+            <button class="btn btn-outline-success" type="button">New Income</button>
+            <button class="btn btn-outline-warning" type="button">New Transfer</button>
+        </div>
     </nav>
+
+    <!-- Main content area -->
+    <main class="flex-grow-1 p-3">
+        <!-- Your dynamic page content goes here -->
+    </main>
 </div>
 
 {{> layout/footer}}
+
+</body>
