@@ -1,23 +1,29 @@
 {{>layout/header}}
 
-<div class="container">
+<div class="table table-striped-columns table-bordered">
     <h2>Incomes</h2>
     <table>
         <thead>
         <tr>
-            <th>Source</th>
-            <th>Amount</th>
-            <th>Date</th>
+            <th scope="col">Id</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Source</th>
+            <th scope="col">Account</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Salary</td>
-            <td>$3,000</td>
+            <th scope="row">1</th>
+            <td>$3000</td>
             <td>2025-06-01</td>
+            <td>Salary</td>
+            <td>Savings</td>
         </tr>
         </tbody>
     </table>
 </div>
+
+
 
 {{>layout/footer}}

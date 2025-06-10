@@ -7,28 +7,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class incomeDto {
     private Long id;
-    private String date;
-    private String accounts;
+    private LocalDate date;
+    private double amount;
     private String source;
-    private float amount;
+    private Long accounts;
 
-    public income toEntity(){
-        return new income(id, date, accounts, source, amount);
-    }
+
 
     @Override
     public String toString() {
         return "incomeDto{" + "id=" + id +
                 ", date=" + date +
-                ", accounts=" + accounts +
+                ", amount=" + amount +
                 ", source=" + source +
-                ", amount=" + amount + '}';
+                ", accounts=" + accounts + '}';
     }
 
 }

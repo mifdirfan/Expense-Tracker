@@ -7,27 +7,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class transferDto {
     private Long id;
-    private String date;
-    private String recipientAccounts;
-    private String senderAccounts;
-    private float amount;
+    private LocalDate date;
+    private Long fromAccountId;
+    private Long toAccountId;
+    private double amount;
 
-    public transfer toEntity(){
-        return new transfer(id, date, recipientAccounts, senderAccounts, amount);
-    }
+
 
     @Override
     public String toString() {
         return "transferDto{" + "id=" + id +
                 ", date=" + date +
-                ", recipientAccounts=" + recipientAccounts +
-                ", senderAccounts=" + senderAccounts +
+                ", fromAccountId=" + fromAccountId +
+                ", toAccountId=" + toAccountId +
                 ", amount=" + amount + '}';
     }
 }

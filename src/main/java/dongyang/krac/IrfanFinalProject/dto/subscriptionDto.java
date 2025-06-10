@@ -13,18 +13,20 @@ import lombok.Setter;
 public class subscriptionDto {
     private Long id;
     private String name;
-    private float amount;
-    private String date;
+    private double amount;
+    private String startdate;
+    private String reccurrent;
+    private Long accounts;
 
-    public subscription toEntity(){
-        return new subscription(id, name, amount, date);
-    }
 
     @Override
     public String toString() {
         return "subscriptionDto{" + "id=" + id +
                 ", name=" + name +
                 ", amount=" + amount +
-                ", date=" + date + '}';
+                ", startdate=" + startdate +
+                ", reccurrent=" + reccurrent +
+                ", accounts=" + accounts + '}';
     }
+
 }

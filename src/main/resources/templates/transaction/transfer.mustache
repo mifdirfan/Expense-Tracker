@@ -1,22 +1,25 @@
 {{>layout/header}}
 
-<div class="container">
-    <h2>Transfers</h2>
+
+<div class="table table-striped-columns table-bordered">
+    <h2>Transfer</h2>
     <table>
         <thead>
         <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Amount</th>
-            <th>Date</th>
+            <th scope="col">Id</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Recipient Account</th>
+            <th scope="col">Sender Account</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>Bank</td>
-            <td>Cash</td>
-            <td>$200</td>
+            <th scope="row">1</th>
+            <td>$3000</td>
             <td>2025-06-01</td>
+            <td>Hana Bank</td>
+            <td>Toss Bank</td>
         </tr>
         </tbody>
     </table>

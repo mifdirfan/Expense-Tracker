@@ -1,11 +1,10 @@
 package dongyang.krac.IrfanFinalProject.Entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,11 +17,16 @@ public class transfer {
     @GeneratedValue
     private Long id;
     @Column
-    private String date;
+    private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "from_account_id")
+    private account fromAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "to_account_id")
+    private account toAccount;
+
     @Column
-    private String recipientAccounts;
-    @Column
-    private String senderAccounts;
-    @Column
-    private float amount;
+    private double amount;
 }

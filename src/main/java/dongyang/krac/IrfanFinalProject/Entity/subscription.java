@@ -1,10 +1,9 @@
 package dongyang.krac.IrfanFinalProject.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,10 +19,13 @@ public class subscription {
     @Column
     private String name;
     @Column
-    private String amount;
+    private double amount;
     @Column
-    private String date;
+    private LocalDate startdate;
+    @Column
+    private String reccurrent;
 
-    public subscription(Long id, String name, float amount, String date) {
-    }
+    @ManyToOne
+    @JoinColumn(name = "accounts_id")
+    private account accounts;
 }

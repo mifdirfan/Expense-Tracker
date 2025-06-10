@@ -1,11 +1,10 @@
 package dongyang.krac.IrfanFinalProject.Entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,14 +17,15 @@ public class income {
     @GeneratedValue
     private Long id;
     @Column
-    private String date;
-    @Column
-    private String accounts;
+    private LocalDate date;
     @Column
     private String source;
     @Column
-    private float amount;
+    private double amount;
 
+    @ManyToOne
+    @JoinColumn(name = "accounts_id")
+    private account accounts;
 
 
 }
