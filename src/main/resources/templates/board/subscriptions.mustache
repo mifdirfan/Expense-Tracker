@@ -1,0 +1,48 @@
+{{>layout/header}}
+
+<h2>Subscriptions</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {{#subsList}}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="/subscriptions/{{id}}">{{Name}}</a>
+                    </h5>
+                    <p class="card-text">
+                        <strong>Amount:</strong> <a href="/subscriptions/{{id}}">{{Amount}}</a><br/>
+                        <strong>Due:</strong> <a href="/subscriptions/{{id}}">{{Due}}</a>
+                    </p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <small class="text-muted">ID: {{id}}</small>
+                    <div>
+                        <a href="/subscriptions/edit/{{id}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a href="/subscriptions/delete/{{id}}" class="btn btn-sm btn-outline-danger">Delete</a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    {{/subsList}}
+</div>
+
+
+
+
+
+{{>layout/footer}}
+
+<!--<div class="container">-->
+<!--    <h2>Subscriptions</h2>-->
+<!--    <div class="subscription-card">-->
+<!--        <h3>Netflix</h3>-->
+<!--        <p>Amount: $15</p>-->
+<!--        <p>Due: 15th every month</p>-->
+<!--    </div>-->
+<!--    <div class="subscription-card">-->
+<!--        <h3>Spotify</h3>-->
+<!--        <p>Amount: $10</p>-->
+<!--        <p>Due: 1st every month</p>-->
+<!--    </div>-->
+<!--</div>-->
+
