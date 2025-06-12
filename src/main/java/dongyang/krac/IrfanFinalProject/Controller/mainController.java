@@ -10,7 +10,7 @@ public class mainController {
     public String home() {
         return "home";
     }
-    @GetMapping("/subscriptions")
+    @GetMapping("/subscription")
     public String subscriptions() {
         return "board/subscriptions";
     }

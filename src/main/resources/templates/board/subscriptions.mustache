@@ -1,48 +1,168 @@
 {{>layout/header}}
-
-<h2>Subscriptions</h2>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {{#subsList}}
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="/subscriptions/{{id}}">{{Name}}</a>
-                    </h5>
-                    <p class="card-text">
-                        <strong>Amount:</strong> <a href="/subscriptions/{{id}}">{{Amount}}</a><br/>
-                        <strong>Due:</strong> <a href="/subscriptions/{{id}}">{{Due}}</a>
-                    </p>
+<div class="container px-5">
+    <!--decide nak tak add subscriptions/id-->
+    <h2>Subscriptions</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#subsList}}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/subscriptions/{{id}}">{{name}}</a>
+                        </h5>
+                        <p class="card-text">
+                            <strong>Amount:</strong> <a href="/subscriptions/{{id}}">{{amount}}</a><br/>
+                            <strong>Due:</strong> <a href="/subscriptions/{{id}}">{{startdate}}</a>
+                        </p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <small class="text-muted">ID: {{id}}</small>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary subscription-edit-btn" data-subscription-id="{{id}}">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger subscription-delete-btn" data-subscription-id="{{id}}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <small class="text-muted">ID: {{id}}</small>
-                    <div>
-                        <a href="/subscriptions/edit/{{id}}" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <a href="/subscriptions/delete/{{id}}" class="btn btn-sm btn-outline-danger">Delete</a>
-                     </div>
+            </div>
+        {{/subsList}}
+    </div>
+    <br/><hr/><br/>
+
+
+    <h2>Add Subscription</h2>
+    <form>
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="subscriptionName" class="form-label">Name</label>
+                    <textarea class="form-control w-75" id="subscriptionName" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="subscriptionAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control w-75" id="subscriptionAmount" placeholder="in ₩">
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="subscriptionDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="subscriptionDate">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Recurrence</label><br/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="recurrence" id="yearly" value="Yearly">
+                        <label class="form-check-label" for="yearly">Yearly</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="recurrence" id="monthly" value="Monthly">
+                        <label class="form-check-label" for="monthly">Monthly</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="recurrence" id="lifetime" value="Lifetime">
+                        <label class="form-check-label" for="lifetime">Lifetime</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="accountSelect" class="form-label">Bank Account</label>
+                    <select class="form-select w-75" id="accountSelect">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
                 </div>
             </div>
         </div>
-    {{/subsList}}
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+        </div>
+    </form>
+
+
+
 </div>
-
-
-
-
-
 {{>layout/footer}}
 
-<!--<div class="container">-->
-<!--    <h2>Subscriptions</h2>-->
-<!--    <div class="subscription-card">-->
-<!--        <h3>Netflix</h3>-->
-<!--        <p>Amount: $15</p>-->
-<!--        <p>Due: 15th every month</p>-->
-<!--    </div>-->
-<!--    <div class="subscription-card">-->
-<!--        <h3>Spotify</h3>-->
-<!--        <p>Amount: $10</p>-->
-<!--        <p>Due: 1st every month</p>-->
-<!--    </div>-->
-<!--</div>-->
+<!-- 댓글 삭제 -->
+<script>
+    {
+        const deleteButtons = document.querySelectorAll(".subscription-delete-btn");
 
+        deleteButtons.forEach(btn => {
+            btn.addEventListener("click", (event) => {
+                const subscriptionDeleteBtn = event.target;
+                const subscriptionId = subscriptionDeleteBtn.getAttribute("data-subscription-id");
+                const url = `/subscriptions/${subscriptionId}`;
+
+                fetch(url, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (!response.ok) {
+                        alert("Failed to delete subscription.");
+                        return;
+                    }
+                    alert(`Subscription ${subscriptionId} has been deleted.`);
+                    window.location.reload();
+                });
+            });
+        });
+    }
+    {
+        const editButtons = document.querySelectorAll(".subscription-edit-btn");
+
+        editButtons.forEach(btn => {
+            btn.addEventListener("click", (event) => {
+                const subscriptionId = event.target.getAttribute("data-subscription-id");
+                window.location.href = `/subscriptions/edit/${subscriptionId}`;
+            });
+        });
+    }
+
+
+    {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault(); // prevent full page reload
+
+            const name = document.getElementById("subscriptionName").value;
+            const amount = document.getElementById("subscriptionAmount").value;
+            const startdate = document.getElementById("subscriptionDate").value;
+            const recurrence = document.querySelector('input[name="recurrence"]:checked')?.value;
+            const accountId = document.getElementById("accountSelect").value;
+
+            const data = {
+                name: name,
+                amount: parseFloat(amount),
+                startdate: startdate,
+                reccurrent: recurrence,
+                accounts: parseInt(accountId)
+            };
+
+            fetch("/subscriptions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (!response.ok) {
+                    alert("Failed to submit subscription.");
+                    return;
+                }
+                alert("Subscription added successfully!");
+                window.location.reload();
+            });
+        });
+    }
+</script>

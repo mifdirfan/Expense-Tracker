@@ -1,15 +1,157 @@
 {{>layout/header}}
-
-<div class="container">
+<div class="container px-5">
+    <!--decide nak tak add subscriptions/id-->
     <h2>Accounts</h2>
-    <div class="account-card">
-        <h3>Main Bank</h3>
-        <p>Balance: $1,200.00</p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#subsList}}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/account/{{id}}">{{name}}</a>
+                        </h5>
+                        <p class="card-text">
+                            <strong>Account Balance:</strong> <a href="/account/{{id}}">{{balance}}</a><br/>
+                            <strong>Type:</strong> <a href="/account/{{id}}">{{type}}</a>
+                        </p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <small class="text-muted">ID: {{id}}</small>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary account-edit-btn" data-account-id="{{id}}">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger account-delete-btn" data-account-id="{{id}}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/subsList}}
     </div>
-    <div class="account-card">
-        <h3>Cash</h3>
-        <p>Balance: $350.00</p>
-    </div>
-</div>
+    <br/><hr/><br/>
 
+
+    <h2>Add Account</h2>
+    <form>
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="accountName" class="form-label">Name</label>
+                    <textarea class="form-control w-75" id="accountName" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="accountBalance" class="form-label">Amount</label>
+                    <input type="number" class="form-control w-75" id="accountBalance" placeholder="in ₩">
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="accountName" class="form-label">Name</label>
+                    <textarea class="form-control w-75" id="accountName" rows="2" placeholder="Credit/Debit etc."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+        </div>
+    </form>
+
+
+
+</div>
 {{>layout/footer}}
+
+<!-- 댓글 삭제 -->
+<!--<script>-->
+<!--    {-->
+<!--        const deleteButtons = document.querySelectorAll(".subscription-delete-btn");-->
+
+<!--        deleteButtons.forEach(btn => {-->
+<!--            btn.addEventListener("click", (event) => {-->
+<!--                const subscriptionDeleteBtn = event.target;-->
+<!--                const subscriptionId = subscriptionDeleteBtn.getAttribute("data-subscription-id");-->
+<!--                const url = `/subscriptions/${subscriptionId}`;-->
+
+<!--                fetch(url, {-->
+<!--                    method: "DELETE"-->
+<!--                }).then(response => {-->
+<!--                    if (!response.ok) {-->
+<!--                        alert("Failed to delete subscription.");-->
+<!--                        return;-->
+<!--                    }-->
+<!--                    alert(`Subscription ${subscriptionId} has been deleted.`);-->
+<!--                    window.location.reload();-->
+<!--                });-->
+<!--            });-->
+<!--        });-->
+<!--    }-->
+<!--    {-->
+<!--        const editButtons = document.querySelectorAll(".subscription-edit-btn");-->
+
+<!--        editButtons.forEach(btn => {-->
+<!--            btn.addEventListener("click", (event) => {-->
+<!--                const subscriptionId = event.target.getAttribute("data-subscription-id");-->
+<!--                window.location.href = `/subscriptions/edit/${subscriptionId}`;-->
+<!--            });-->
+<!--        });-->
+<!--    }-->
+
+
+<!--    {-->
+<!--        const form = document.querySelector("form");-->
+<!--        form.addEventListener("submit", (event) => {-->
+<!--            event.preventDefault(); // prevent full page reload-->
+
+<!--            const name = document.getElementById("subscriptionName").value;-->
+<!--            const amount = document.getElementById("subscriptionAmount").value;-->
+<!--            const startdate = document.getElementById("subscriptionDate").value;-->
+<!--            const recurrence = document.querySelector('input[name="recurrence"]:checked')?.value;-->
+<!--            const accountId = document.getElementById("accountSelect").value;-->
+
+<!--            const data = {-->
+<!--                name: name,-->
+<!--                amount: parseFloat(amount),-->
+<!--                startdate: startdate,-->
+<!--                reccurrent: recurrence,-->
+<!--                accounts: parseInt(accountId)-->
+<!--            };-->
+
+<!--            fetch("/subscriptions", {-->
+<!--                method: "POST",-->
+<!--                headers: {-->
+<!--                    "Content-Type": "application/json"-->
+<!--                },-->
+<!--                body: JSON.stringify(data)-->
+<!--            }).then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    alert("Failed to submit subscription.");-->
+<!--                    return;-->
+<!--                }-->
+<!--                alert("Subscription added successfully!");-->
+<!--                window.location.reload();-->
+<!--            });-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+
+
+
+
+<!--<div class="container">-->
+<!--    <h2>Accounts</h2>-->
+<!--    <div class="account-card">-->
+<!--        <h3>Main Bank</h3>-->
+<!--        <p>Balance: $1,200.00</p>-->
+<!--    </div>-->
+<!--    <div class="account-card">-->
+<!--        <h3>Cash</h3>-->
+<!--        <p>Balance: $350.00</p>-->
+<!--    </div>-->
+<!--</div>-->

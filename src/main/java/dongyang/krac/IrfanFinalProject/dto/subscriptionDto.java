@@ -18,6 +18,16 @@ public class subscriptionDto {
     private String reccurrent;
     private Long accounts;
 
+    public static subscriptionDto createsubscripiotnDto(subscription target) {
+        return new subscriptionDto(
+                target.getId(),
+                target.getName(),
+                target.getAmount(),
+                target.getStartdate().toString(),
+                target.getReccurrent(),
+                target.getAccounts().getId());
+    }
+
 
     @Override
     public String toString() {
