@@ -1,5 +1,6 @@
 package dongyang.krac.IrfanFinalProject.Entity;
 
+import dongyang.krac.IrfanFinalProject.dto.subscriptionDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
+
 @Entity
 
 public class subscription {
@@ -28,4 +30,5 @@ public class subscription {
     @ManyToOne
     @JoinColumn(name = "accounts_id")
     private account accounts;
+
 }

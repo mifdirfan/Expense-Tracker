@@ -1,8 +1,8 @@
 {{>layout/header}}
 
-<div class="table table-striped-columns table-bordered">
+<div class="container px-5">
     <h2>Incomes</h2>
-    <table>
+    <table class="table table-striped-columns table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">Id</th>
@@ -13,13 +13,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>$3000</td>
-            <td>2025-06-01</td>
-            <td>Salary</td>
-            <td>Savings</td>
-        </tr>
+        {{#incomeList}}
+            <tr>
+                <th scope="row">{{id}}</th>
+                <td>{{amount}}</td>
+                <td>{{date}}</td>
+                <td>{{source}}</td>
+                <td>{{accounts.name}}</td>
+            </tr>
+        {{/incomeList}}
         </tbody>
     </table>
 </div>

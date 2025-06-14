@@ -23,7 +23,7 @@ public class subscriptionService {
     public subscriptionDto delete(Long id) {
         // 1. 댓글 조회 및 예외 발생
         subscription target = subscriptionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("댓글 삭제 실패! " +
+                .orElseThrow(() -> new IllegalArgumentException("삭제 실패! " +
                         "대상이 없습니다."));
 
         // 2. 댓글 삭제
@@ -49,5 +49,23 @@ public class subscriptionService {
 
         return subscriptionDto.createsubscripiotnDto(saved);
     }
+
+    public subscriptionDto update(Long id, subscriptionDto dto) {
+        subscription target = subscriptionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
+
+        account acc = accountRepository.findById(dto.getAccounts())
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        target.setName(dto.getName());
+        target.setAmount(dto.getAmount());
+        target.setStartdate(LocalDate.parse(dto.getStartdate()));
+        target.setReccurrent(dto.getReccurrent());
+        target.setAccounts(acc);
+
+        subscription updated = subscriptionRepository.save(target);
+        return subscriptionDto.createsubscripiotnDto(updated);
+    }
+
 
 }

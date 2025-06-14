@@ -18,7 +18,15 @@
                     <div class="card-footer d-flex justify-content-between">
                         <small class="text-muted">ID: {{id}}</small>
                         <div>
-                            <button class="btn btn-sm btn-outline-primary subscription-edit-btn" data-subscription-id="{{id}}">
+                            <button class="btn btn-sm btn-outline-primary subscription-edit-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#subscription-edit-modal"
+                                    data-bs-id="{{id}}"
+                                    data-bs-name="{{name}}"
+                                    data-bs-amount="{{amount}}"
+                                    data-bs-startdate="{{startdate}}"
+                                    data-bs-reccurrent="{{reccurrent}}"
+                                    data-bs-account-id="{{accounts.id}}">
                                 Edit
                             </button>
                             <button class="btn btn-sm btn-outline-danger subscription-delete-btn" data-subscription-id="{{id}}">
@@ -94,42 +102,7 @@
 </div>
 {{>layout/footer}}
 
-<!-- 댓글 삭제 -->
 <script>
-    {
-        const deleteButtons = document.querySelectorAll(".subscription-delete-btn");
-
-        deleteButtons.forEach(btn => {
-            btn.addEventListener("click", (event) => {
-                const subscriptionDeleteBtn = event.target;
-                const subscriptionId = subscriptionDeleteBtn.getAttribute("data-subscription-id");
-                const url = `/subscriptions/${subscriptionId}`;
-
-                fetch(url, {
-                    method: "DELETE"
-                }).then(response => {
-                    if (!response.ok) {
-                        alert("Failed to delete subscription.");
-                        return;
-                    }
-                    alert(`Subscription ${subscriptionId} has been deleted.`);
-                    window.location.reload();
-                });
-            });
-        });
-    }
-    {
-        const editButtons = document.querySelectorAll(".subscription-edit-btn");
-
-        editButtons.forEach(btn => {
-            btn.addEventListener("click", (event) => {
-                const subscriptionId = event.target.getAttribute("data-subscription-id");
-                window.location.href = `/subscriptions/edit/${subscriptionId}`;
-            });
-        });
-    }
-
-
     {
         const form = document.querySelector("form");
         form.addEventListener("submit", (event) => {
@@ -149,7 +122,7 @@
                 accounts: parseInt(accountId)
             };
 
-            fetch("/subscriptions", {
+            fetch("/subscriptions/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -166,3 +139,130 @@
         });
     }
 </script>
+
+<!-- Modal -->
+<div class="modal fade" id="subscription-edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-subscription-id">
+
+                <div class="mb-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="edit-subscription-name">
+                </div>
+                <div class="mb-3">
+                    <label>Amount</label>
+                    <input type="number" class="form-control" id="edit-subscription-amount">
+                </div>
+                <div class="mb-3">
+                    <label for="subscriptionDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="subscriptionDate">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Recurrence</label><br/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="recurrence" id="yearly" value="Yearly">
+                        <label class="form-check-label" for="yearly">Yearly</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="recurrence" id="monthly" value="Monthly">
+                        <label class="form-check-label" for="monthly">Monthly</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="recurrence" id="lifetime" value="Lifetime">
+                        <label class="form-check-label" for="lifetime">Lifetime</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Account ID</label>
+                    <input type="number" class="form-control" id="edit-subscription-account" disabled>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="subscription-update-btn" class="btn btn-success">Update</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Handle DELETE
+        document.querySelectorAll(".subscription-delete-btn").forEach(btn => {
+            btn.addEventListener("click", event => {
+                const id = event.target.getAttribute("data-subscription-id");
+                fetch(`/subscriptions/${id}`, { method: "DELETE" })
+                        .then(res => {
+                            if (!res.ok) {
+                                alert("Failed to delete subscription.");
+                                return;
+                            }
+                            alert("Subscription deleted.");
+                            window.location.reload();
+                        });
+            });
+        });
+
+        // Handle OPENING modal and prefill data
+        const subscriptionEditModal = document.querySelector("#subscription-edit-modal");
+        if (subscriptionEditModal) {
+            subscriptionEditModal.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget;
+                document.querySelector("#edit-subscription-id").value = btn.getAttribute("data-bs-id");
+                document.querySelector("#edit-subscription-name").value = btn.getAttribute("data-bs-name");
+                document.querySelector("#edit-subscription-amount").value = btn.getAttribute("data-bs-amount");
+                document.querySelector("#subscriptionDate").value = btn.getAttribute("data-bs-startdate");
+                document.querySelector("#edit-subscription-account").value = btn.getAttribute("data-bs-account-id");
+
+                const recurrence = btn.getAttribute("data-bs-reccurrent");
+                if (recurrence) {
+                    document.querySelectorAll("input[name='recurrence']").forEach(r => {
+                        r.checked = r.value === recurrence;
+                    });
+                }
+            });
+        }
+
+        // Handle UPDATE from modal
+        const updateBtn = document.querySelector("#subscription-update-btn");
+        if (updateBtn) {
+            updateBtn.addEventListener("click", () => {
+                const id = document.querySelector("#edit-subscription-id").value;
+                const name = document.querySelector("#edit-subscription-name").value;
+                const amount = document.querySelector("#edit-subscription-amount").value;
+                const startdate = document.querySelector("#subscriptionDate").value;
+                const reccurrent = document.querySelector("input[name='recurrence']:checked")?.value;
+                const accounts = document.querySelector("#edit-subscription-account").value;
+
+                const data = {
+                    id,
+                    name,
+                    amount: parseFloat(amount),
+                    startdate,
+                    reccurrent,
+                    accounts: parseInt(accounts)
+                };
+
+                fetch(`/subscriptions/edit/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    alert(response.ok
+                            ? "Subscription updated successfully."
+                            : "Failed to update subscription.");
+                    window.location.reload();
+                });
+            });
+        }
+
+    });
+</script>
+

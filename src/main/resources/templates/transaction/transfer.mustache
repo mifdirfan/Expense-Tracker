@@ -1,9 +1,9 @@
 {{>layout/header}}
 
 
-<div class="table table-striped-columns table-bordered">
+<div class="container px-5">
     <h2>Transfer</h2>
-    <table>
+    <table class="table table-striped-columns table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">Id</th>
@@ -14,13 +14,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>$3000</td>
-            <td>2025-06-01</td>
-            <td>Hana Bank</td>
-            <td>Toss Bank</td>
-        </tr>
+        {{#transferList}}
+            <tr>
+                <th scope="row">{{id}}</th>
+                <td>{{amount}}</td>
+                <td>{{date}}</td>
+                <td>{{toAccount.name}}</td>
+                <td>{{fromAccount.name}}</td>
+            </tr>
+        {{/transferList}}
         </tbody>
     </table>
 </div>

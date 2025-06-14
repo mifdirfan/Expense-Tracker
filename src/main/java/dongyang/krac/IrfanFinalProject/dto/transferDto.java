@@ -16,8 +16,8 @@ import java.time.LocalDate;
 public class transferDto {
     private Long id;
     private LocalDate date;
-    private Long fromAccountId;
-    private Long toAccountId;
+    private Long fromAccount;
+    private Long toAccount;
     private double amount;
 
 
@@ -26,8 +26,8 @@ public class transferDto {
     public String toString() {
         return "transferDto{" + "id=" + id +
                 ", date=" + date +
-                ", fromAccountId=" + fromAccountId +
-                ", toAccountId=" + toAccountId +
+                ", fromAccount=" + fromAccount +
+                ", toAccount=" + toAccount +
                 ", amount=" + amount + '}';
     }
 }

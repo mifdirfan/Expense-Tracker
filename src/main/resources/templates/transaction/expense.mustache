@@ -1,8 +1,8 @@
 {{>layout/header}}
 
-<div class="table table-striped-columns table-bordered">
+<div class="container px-5">
     <h2>Expenses</h2>
-    <table>
+    <table class="table table-striped-columns table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">Id</th>
@@ -13,16 +13,69 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>$12</td>
-            <td>2025-06-01</td>
-            <td>Food & Drinks</td>
-            <td>Savings</td>
-        </tr>
+        {{#expenseList}}
+            <tr>
+                <th scope="row">{{id}}</th>
+                <td>{{amount}}</td>
+                <td>{{date}}</td>
+                <td>{{category}}</td>
+                <td>{{accounts.name}}</td>
+            </tr>
+        {{/expenseList}}
         </tbody>
     </table>
 </div>
 
+<br/><hr/><br/>
+
+
+<h2>Add Expense</h2>
+<form>
+    <div class="row">
+        <!-- Left column -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="expenseDesc" class="form-label">Description</label>
+                <textarea class="form-control w-75" id="expenseDesc" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="expenseAmount" class="form-label">Amount</label>
+                <input type="number" class="form-control w-75" id="expenseAmount" placeholder="in ₩">
+            </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="expenseDate" class="form-label">Date</label>
+                <input type="date" class="form-control w-75" id="expenseDate">
+            </div>
+
+            <div class="mb-3">
+                <label for="categorySelect" class="form-label">Category</label>
+                <select class="form-select w-75" id="categorySelect">
+                    <option selected>Select category</option>
+                    {{#categoryList}}
+                        <option value="{{id}}">{{name}}</option>
+                    {{/categoryList}}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="accountSelect" class="form-label">Bank Account</label>
+                <select class="form-select w-75" id="accountSelect">
+                    <option selected>Choose Bank account</option>
+                    {{#accountList}}
+                        <option value="{{id}}">{{name}} - {{type}}</option>
+                    {{/accountList}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+    </div>
+</form>
 
 {{>layout/footer}}

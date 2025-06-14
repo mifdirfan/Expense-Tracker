@@ -36,10 +36,18 @@ public class subscriptionController {
         return "board/subscriptions";
     }
 
-    @PostMapping("/subscriptions")
+    @PostMapping("/subscriptions/add")
     public ResponseEntity<subscriptionDto> create(@RequestBody subscriptionDto target) {
         subscriptionDto created = subscriptionService.create(target);
         return ResponseEntity.ok(created);
+    }
+
+    @PatchMapping("/subscriptions/edit/{id}")
+    public ResponseEntity<subscriptionDto> update(@PathVariable Long id,
+                                             @RequestBody subscriptionDto dto) {
+
+        subscriptionDto updatedDto = subscriptionService.update(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
     }
 
     @DeleteMapping("/subscriptions/{id}")
