@@ -1,12 +1,76 @@
 {{>layout/header}}
 
-<div class="container">
+<div class="container px-5">
+    <!--decide nak tak add subscriptions/id-->
     <h2>Categories</h2>
-    <div class="category-card">Food & Drinks</div>
-    <div class="category-card">Transportation</div>
-    <div class="category-card">Entertainment</div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {{#categoryList}}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/category/{{id}}">{{name}}</a>
+                        </h5>
+                        <p class="card-text">
+                            <strong>Limit</strong> <a href="/account/{{id}}">{{balance}}</a><br/>
+                            <strong>Type:</strong> <a href="/account/{{id}}">{{type}}</a>
+                        </p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <small class="text-muted">ID: {{id}}</small>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary account-edit-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#account-edit-modal"
+                                    data-bs-id="{{id}}"
+                                    data-bs-name="{{name}}"
+                                    data-bs-balance="{{balance}}"
+                                    data-bs-type="{{type}}">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger account-delete-btn" data-account-id="{{id}}">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/categoryList}}
+    </div>
+    <br/><hr/><br/>
+
+
+    <h2>Add Account</h2>
+    <form>
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="accountName" class="form-label">Name</label>
+                    <textarea class="form-control w-75" id="accountName" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="accountBalance" class="form-label">Amount</label>
+                    <input type="number" class="form-control w-75" id="accountBalance" placeholder="in ₩">
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="accountName" class="form-label">Type</label>
+                    <textarea class="form-control w-75" id="accountType" rows="2" placeholder="Credit/Debit etc."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+        </div>
+    </form>
+
+
+
 </div>
-
-
-
 {{>layout/footer}}

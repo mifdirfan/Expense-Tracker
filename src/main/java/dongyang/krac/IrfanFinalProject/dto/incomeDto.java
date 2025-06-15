@@ -15,10 +15,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class incomeDto {
     private Long id;
+    private String description;
     private LocalDate date;
     private double amount;
-    private String source;
+    private Long category;
     private Long accounts;
+
+    public static incomeDto createIncomeDto(income target) {
+        return new incomeDto(
+                target.getId(),
+                target.getDescription(),
+                target.getDate(),
+                target.getAmount(),
+                target.getCategory().getId(),
+                target.getAccounts().getId()
+        );
+    }
 
 
 
@@ -27,7 +39,7 @@ public class incomeDto {
         return "incomeDto{" + "id=" + id +
                 ", date=" + date +
                 ", amount=" + amount +
-                ", source=" + source +
+                ", source=" + category +
                 ", accounts=" + accounts + '}';
     }
 

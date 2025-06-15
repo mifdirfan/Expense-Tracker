@@ -179,8 +179,13 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label>Account ID</label>
-                    <input type="number" class="form-control" id="edit-subscription-account" disabled>
+                    <label>Account</label>
+                    <select class="form-select w-75" id="edit-subscription-account">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">

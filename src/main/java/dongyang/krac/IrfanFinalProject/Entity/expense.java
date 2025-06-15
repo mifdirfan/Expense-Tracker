@@ -17,9 +17,12 @@ public class expense {
     @GeneratedValue
     private Long id;
     @Column
-    private LocalDate date;
+    private String description;
     @Column
-    private String category;
+    private LocalDate date;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private category category;
     @Column
     private double amount;
 

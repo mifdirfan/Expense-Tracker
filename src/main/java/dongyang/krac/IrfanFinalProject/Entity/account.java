@@ -23,4 +23,5 @@ public class account {
     private String type;
     @Column
     private double balance;
+
 }

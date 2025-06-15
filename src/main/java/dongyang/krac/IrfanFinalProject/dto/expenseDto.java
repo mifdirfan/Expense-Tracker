@@ -8,26 +8,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class expenseDto {
     private Long id;
+    private String description;
     private LocalDate date;
-    private String category;
+    private Long category;
+    private String categoryName; // for template display
     private double amount;
     private Long accountId;
 
-
-
-    @Override
-    public String toString() {
-        return "expenseDto{" + "id=" + id +
-                ", date=" + date +
-                ", category=" + category +
-                ", amount=" + amount +
-                ", accountId=" + accountId + '}';
+    public static expenseDto createExpenseDto(expense target) {
+        return new expenseDto(
+                target.getId(),
+                target.getDescription(),
+                target.getDate(),
+                target.getCategory().getId(),
+                target.getCategory().getName(),
+                target.getAmount(),
+                target.getAccounts().getId()
+        );
     }
 }

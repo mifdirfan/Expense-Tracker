@@ -6,76 +6,256 @@
         <thead>
         <tr>
             <th scope="col">Id</th>
+            <th scope="col">Description</th>
             <th scope="col">Amount</th>
             <th scope="col">Date</th>
             <th scope="col">Category</th>
             <th scope="col">Account</th>
+            <th scope="col">Actions</th> <!-- added -->
         </tr>
         </thead>
         <tbody>
         {{#expenseList}}
             <tr>
                 <th scope="row">{{id}}</th>
+                <td>{{description}}</td>
                 <td>{{amount}}</td>
                 <td>{{date}}</td>
-                <td>{{category}}</td>
+                <td>{{category.name}}</td>
                 <td>{{accounts.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#expense-edit-modal"
+                            data-bs-id="{{id}}"
+                            data-bs-description="{{description}}"
+                            data-bs-amount="{{amount}}"
+                            data-bs-date="{{date}}"
+                            data-bs-category="{{category.id}}"
+                            data-bs-account-id="{{accounts.id}}">Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm expense-delete-btn" data-expense-id="{{id}}">Delete</button>
+                </td>
             </tr>
         {{/expenseList}}
         </tbody>
     </table>
+
+
+    <br/><hr/><br/>
+
+
+    <h2>Add Expense</h2>
+    <form>
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="expenseDescription" class="form-label">Description</label>
+                    <textarea class="form-control w-75" id="expenseDescription" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="expenseAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control w-75" id="expenseAmount" placeholder="in ₩">
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="expenseDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="expenseDate">
+                </div>
+
+                <div class="mb-3">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select class="form-select w-75" id="categorySelect">
+                        <option selected>Select category</option>
+                        {{#categoryList}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/categoryList}}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="accountSelect" class="form-label">Bank Account</label>
+                    <select class="form-select w-75" id="accountSelect">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+        </div>
+    </form>
 </div>
 
-<br/><hr/><br/>
 
 
-<h2>Add Expense</h2>
-<form>
-    <div class="row">
-        <!-- Left column -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="expenseDesc" class="form-label">Description</label>
-                <textarea class="form-control w-75" id="expenseDesc" rows="2"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="expenseAmount" class="form-label">Amount</label>
-                <input type="number" class="form-control w-75" id="expenseAmount" placeholder="in ₩">
-            </div>
-        </div>
-
-        <!-- Right column -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="expenseDate" class="form-label">Date</label>
-                <input type="date" class="form-control w-75" id="expenseDate">
-            </div>
-
-            <div class="mb-3">
-                <label for="categorySelect" class="form-label">Category</label>
-                <select class="form-select w-75" id="categorySelect">
-                    <option selected>Select category</option>
-                    {{#categoryList}}
-                        <option value="{{id}}">{{name}}</option>
-                    {{/categoryList}}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="accountSelect" class="form-label">Bank Account</label>
-                <select class="form-select w-75" id="accountSelect">
-                    <option selected>Choose Bank account</option>
-                    {{#accountList}}
-                        <option value="{{id}}">{{name}} - {{type}}</option>
-                    {{/accountList}}
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
-    </div>
-</form>
 
 {{>layout/footer}}
+
+<script>
+    {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault(); // prevent full page reload
+
+            let description = document.getElementById("expenseDescription").value.trim();
+            const amount = document.getElementById("expenseAmount").value;
+            const date = document.getElementById("expenseDate").value;
+            const category = document.getElementById("categorySelect").value;
+            const accountId = document.getElementById("accountSelect").value;
+
+            if (description === "") {
+                description = "-";
+            }
+
+            const data = {
+                description: description,
+                amount: parseFloat(amount),
+                date: date,
+                category: parseInt(category),
+                accountId: parseInt(accountId)
+            };
+
+            fetch("/expense/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (!response.ok) {
+                    alert("Failed to submit expense.");
+                    return;
+                }
+                alert("Expense added successfully!");
+                window.location.reload();
+            });
+        });
+    }
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="expense-edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Expense</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-expense-id">
+
+                <div class="mb-3">
+                    <label>Desc</label>
+                    <input type="text" class="form-control" id="edit-expense-description">
+                </div>
+                <div class="mb-3">
+                    <label>Amount</label>
+                    <input type="number" class="form-control" id="edit-expense-amount">
+                </div>
+                <div class="mb-3">
+                    <label for="expenseDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="expenseDate">
+                </div>
+                <div class="mb-3">
+                    <label>Category</label>
+                    <select class="form-select w-75" id="edit-expense-category">
+                        <option selected>Category</option>
+                        {{#categoryList}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/categoryList}}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Account</label>
+                    <select class="form-select w-75" id="edit-expense-account">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="expense-update-btn" class="btn btn-success">Update</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Handle DELETE
+        document.querySelectorAll(".expense-delete-btn").forEach(btn => {
+            btn.addEventListener("click", event => {
+                const id = event.target.getAttribute("data-expense-id");
+                fetch(`/expense/${id}`, { method: "DELETE" })
+                        .then(res => {
+                            if (!res.ok) {
+                                alert("Failed to delete expense.");
+                                return;
+                            }
+                            alert("Expense deleted.");
+                            window.location.reload();
+                        });
+            });
+        });
+
+        // Handle OPENING modal and prefill data
+        const expenseEditModal = document.querySelector("#expense-edit-modal");
+        if (expenseEditModal) {
+            expenseEditModal.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget;
+                document.querySelector("#edit-expense-id").value = btn.getAttribute("data-bs-id");
+                document.querySelector("#edit-expense-description").value = btn.getAttribute("data-bs-description");
+                document.querySelector("#edit-expense-amount").value = btn.getAttribute("data-bs-amount");
+                document.querySelector("#expenseDate").value = btn.getAttribute("data-bs-date");
+                document.querySelector("#edit-expense-category").value = btn.getAttribute("data-bs-category");
+                document.querySelector("#edit-expense-account").value = btn.getAttribute("data-bs-account-id");
+            });
+        }
+
+        // Handle UPDATE from modal
+        const updateBtn = document.querySelector("#expense-update-btn");
+        if (updateBtn) {
+            updateBtn.addEventListener("click", () => {
+                const id = document.querySelector("#edit-expense-id").value;
+                const description = document.querySelector("#edit-expense-description").value;
+                const amount = document.querySelector("#edit-expense-amount").value;
+                const date = document.querySelector("#expenseDate").value;
+                const category = document.querySelector("#edit-expense-category").value;
+                const accounts = document.querySelector("#edit-expense-account").value;
+
+                const data = {
+                    id,
+                    name,
+                    amount: parseFloat(amount),
+                    date: date,
+                    category: parseInt(category),
+                    accounts: parseInt(accounts)
+                };
+
+                fetch(`/expense/edit/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    alert(response.ok
+                            ? "expense updated successfully."
+                            : "Failed to update expense.");
+                    window.location.reload();
+                });
+            });
+        }
+
+    });
+</script>

@@ -19,7 +19,10 @@ public class income {
     @Column
     private LocalDate date;
     @Column
-    private String source;
+    private String description;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private category category;
     @Column
     private double amount;
 

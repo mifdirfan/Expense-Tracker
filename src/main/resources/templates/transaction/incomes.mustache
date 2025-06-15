@@ -1,31 +1,263 @@
+
 {{>layout/header}}
 
 <div class="container px-5">
-    <h2>Incomes</h2>
+    <h2>Income</h2>
     <table class="table table-striped-columns table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">Id</th>
+            <th scope="col">Description</th>
             <th scope="col">Amount</th>
             <th scope="col">Date</th>
-            <th scope="col">Source</th>
+            <th scope="col">Category</th>
             <th scope="col">Account</th>
+            <th scope="col">Actions</th> <!-- added -->
         </tr>
         </thead>
         <tbody>
         {{#incomeList}}
             <tr>
                 <th scope="row">{{id}}</th>
+                <td>{{description}}</td>
                 <td>{{amount}}</td>
                 <td>{{date}}</td>
-                <td>{{source}}</td>
+                <td>{{category.name}}</td>
                 <td>{{accounts.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#income-edit-modal"
+                            data-bs-id="{{id}}"
+                            data-bs-description="{{description}}"
+                            data-bs-amount="{{amount}}"
+                            data-bs-date="{{date}}"
+                            data-bs-category="{{category.id}}"
+                            data-bs-account-id="{{accounts.id}}">Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm income-delete-btn" data-income-id="{{id}}">Delete</button>
+                </td>
             </tr>
         {{/incomeList}}
         </tbody>
     </table>
+
+
+    <br/><hr/><br/>
+
+
+    <h2>Add Income</h2>
+    <form>
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="incomeDescription" class="form-label">Description</label>
+                    <textarea class="form-control w-75" id="incomeDescription" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="incomeAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control w-75" id="incomeAmount" placeholder="in ₩">
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="incomeDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="incomeDate">
+                </div>
+
+                <div class="mb-3">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select class="form-select w-75" id="categorySelect">
+                        <option selected>Select category</option>
+                        {{#categoryList}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/categoryList}}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="accountSelect" class="form-label">Bank Account</label>
+                    <select class="form-select w-75" id="accountSelect">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+        </div>
+    </form>
 </div>
 
 
 
+
 {{>layout/footer}}
+
+<script>
+    {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault(); // prevent full page reload
+
+            let description = document.getElementById("incomeDescription").value.trim();
+            const amount = document.getElementById("incomeAmount").value;
+            const date = document.getElementById("incomeDate").value;
+            const category = document.getElementById("categorySelect").value;
+            const accountId = document.getElementById("accountSelect").value;
+
+            if (description === "") {
+                description = "-";
+            }
+
+            const data = {
+                description: description,
+                amount: parseFloat(amount),
+                date: date,
+                category: parseInt(category),
+                accountId: parseInt(accountId)
+            };
+
+            fetch("/income/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (!response.ok) {
+                    alert("Failed to submit income.");
+                    return;
+                }
+                alert("Income added successfully!");
+                window.location.reload();
+            });
+        });
+    }
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="income-edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Income</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-income-id">
+
+                <div class="mb-3">
+                    <label>Desc</label>
+                    <input type="text" class="form-control" id="edit-income-description">
+                </div>
+                <div class="mb-3">
+                    <label>Amount</label>
+                    <input type="number" class="form-control" id="edit-income-amount">
+                </div>
+                <div class="mb-3">
+                    <label for="incomeDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="incomeDate">
+                </div>
+                <div class="mb-3">
+                    <label>Category</label>
+                    <select class="form-select w-75" id="edit-income-category">
+                        <option selected>Category</option>
+                        {{#categoryList}}
+                            <option value="{{id}}">{{name}}</option>
+                        {{/categoryList}}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Account</label>
+                    <select class="form-select w-75" id="edit-income-account">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="income-update-btn" class="btn btn-success">Update</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Handle DELETE
+        document.querySelectorAll(".income-delete-btn").forEach(btn => {
+            btn.addEventListener("click", event => {
+                const id = event.target.getAttribute("data-income-id");
+                fetch(`/income/${id}`, { method: "DELETE" })
+                        .then(res => {
+                            if (!res.ok) {
+                                alert("Failed to delete income.");
+                                return;
+                            }
+                            alert("Income deleted.");
+                            window.location.reload();
+                        });
+            });
+        });
+
+        // Handle OPENING modal and prefill data
+        const incomeEditModal = document.querySelector("#income-edit-modal");
+        if (incomeEditModal) {
+            incomeEditModal.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget;
+                document.querySelector("#edit-income-id").value = btn.getAttribute("data-bs-id");
+                document.querySelector("#edit-income-description").value = btn.getAttribute("data-bs-description");
+                document.querySelector("#edit-income-amount").value = btn.getAttribute("data-bs-amount");
+                document.querySelector("#incomeDate").value = btn.getAttribute("data-bs-date");
+                document.querySelector("#edit-income-category").value = btn.getAttribute("data-bs-category");
+                document.querySelector("#edit-income-account").value = btn.getAttribute("data-bs-account-id");
+            });
+        }
+
+        // Handle UPDATE from modal
+        const updateBtn = document.querySelector("#income-update-btn");
+        if (updateBtn) {
+            updateBtn.addEventListener("click", () => {
+                const id = document.querySelector("#edit-income-id").value;
+                const description = document.querySelector("#edit-income-description").value;
+                const amount = document.querySelector("#edit-income-amount").value;
+                const date = document.querySelector("#incomeDate").value;
+                const category = document.querySelector("#edit-income-category").value;
+                const accounts = document.querySelector("#edit-income-account").value;
+
+                const data = {
+                    id,
+                    name,
+                    amount: parseFloat(amount),
+                    date: date,
+                    category: parseInt(category),
+                    accounts: parseInt(accounts)
+                };
+
+                fetch(`/income/edit/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    alert(response.ok
+                            ? "income updated successfully."
+                            : "Failed to update income.");
+                    window.location.reload();
+                });
+            });
+        }
+
+    });
+</script>
+
