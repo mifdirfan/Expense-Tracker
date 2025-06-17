@@ -56,6 +56,9 @@ public class transactionController {
     @GetMapping("/transfer")
     public String transfer(Model mo) {
         List<transfer> transferList = (List<transfer>)transferRepository.findAll();
+        List<account> accountList = (List<account>)accountRepository.findByActiveTrue();
+
+        mo.addAttribute("accountList", accountList);
         mo.addAttribute("transferList", transferList);
         return "transaction/transfer";
     }
@@ -83,14 +86,14 @@ public class transactionController {
     }
 
     // income controller
-    @PostMapping("/income/add")
-    public ResponseEntity<incomeDto> createExpense(@RequestBody incomeDto target) {
+    @PostMapping("/incomes/add")
+    public ResponseEntity<incomeDto> createIncome(@RequestBody incomeDto target) {
         incomeDto created = transactionService.createIncome(target);
 
         return ResponseEntity.ok(created);
     }
 
-    @PatchMapping("/income/edit/{id}")
+    @PatchMapping("/incomes/edit/{id}")
     public ResponseEntity<incomeDto> updateIncome(@PathVariable Long id,
                                                     @RequestBody incomeDto dto) {
 
@@ -98,9 +101,31 @@ public class transactionController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
     }
 
-    @DeleteMapping("/income/{id}")
+    @DeleteMapping("/incomes/{id}")
     public ResponseEntity<incomeDto> deleteIncome(@PathVariable Long id) {
         incomeDto deletedDto = transactionService.deleteIncome(id);
+        return ResponseEntity.status(HttpStatus.OK).body(deletedDto);
+    }
+
+    // transfer controller
+    @PostMapping("/transfer/add")
+    public ResponseEntity<transferDto> createTransfer(@RequestBody transferDto target) {
+        transferDto created = transactionService.createTransfer(target);
+
+        return ResponseEntity.ok(created);
+    }
+
+    @PatchMapping("/transfer/edit/{id}")
+    public ResponseEntity<transferDto> updateTransfer(@PathVariable Long id,
+                                                  @RequestBody transferDto dto) {
+
+        transferDto updatedDto = transactionService.updateTransfer(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+
+    @DeleteMapping("/transfer/{id}")
+    public ResponseEntity<transferDto> deleteTransfer(@PathVariable Long id) {
+        transferDto deletedDto = transactionService.deleteTransfer(id);
         return ResponseEntity.status(HttpStatus.OK).body(deletedDto);
     }
 

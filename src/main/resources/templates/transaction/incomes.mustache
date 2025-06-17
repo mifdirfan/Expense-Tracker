@@ -124,7 +124,7 @@
                 accountId: parseInt(accountId)
             };
 
-            fetch("/income/add", {
+            fetch("/incomes/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -199,7 +199,7 @@
         document.querySelectorAll(".income-delete-btn").forEach(btn => {
             btn.addEventListener("click", event => {
                 const id = event.target.getAttribute("data-income-id");
-                fetch(`/income/${id}`, { method: "DELETE" })
+                fetch(`/incomes/${id}`, { method: "DELETE" })
                         .then(res => {
                             if (!res.ok) {
                                 alert("Failed to delete income.");
@@ -245,7 +245,7 @@
                     accounts: parseInt(accounts)
                 };
 
-                fetch(`/income/edit/${id}`, {
+                fetch(`/incomes/edit/${id}`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data)

@@ -182,7 +182,7 @@
                 fetch(`/account/${id}`, { method: "DELETE" })
                         .then(res => {
                             if (!res.ok) {
-                                alert("Failed to delete account.");
+                                alert("Make sure you have no transactions associated with this accounts");
                                 return;
                             }
                             alert("Account deleted.");

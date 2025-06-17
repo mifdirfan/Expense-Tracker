@@ -20,6 +20,15 @@ public class transferDto {
     private Long toAccount;
     private double amount;
 
+    public static transferDto createTransferDto(transfer target) {
+        return new transferDto(
+                target.getId(),
+                target.getDate(),
+                target.getFromAccount().getId(),
+                target.getToAccount().getId(),
+                target.getAmount());
+    }
+
 
 
     @Override

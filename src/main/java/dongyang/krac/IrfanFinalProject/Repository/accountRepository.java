@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface accountRepository extends CrudRepository<account, Long> {
     List<account> findByActiveTrue();
+    List<account> findTop3ByOrderByIdDesc();
 }

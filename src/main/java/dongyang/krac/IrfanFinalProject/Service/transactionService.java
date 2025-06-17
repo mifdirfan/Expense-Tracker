@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class transactionService {
     @Autowired
@@ -113,7 +115,7 @@ public class transactionService {
     // income service
     @Transactional
     public incomeDto createIncome(incomeDto target){
-        account account = accountRepository.findById((target.getAccounts()))
+        account account = accountRepository.findById((target.getAccountId()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Account ID"));
         category category = categoryRepository.findById((target.getCategory()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category"));
@@ -153,7 +155,7 @@ public class transactionService {
         accountRepository.save(oldAccount);
 
 
-        account newAccount = accountRepository.findById(dto.getAccounts())
+        account newAccount = accountRepository.findById(dto.getAccountId())
                 .orElseThrow(() -> new IllegalArgumentException("account not found"));
 
         category category = categoryRepository.findById(dto.getCategory())
@@ -198,5 +200,94 @@ public class transactionService {
 
         // 3. 삭제 댓글을 DTO로 변환 및 반환
         return incomeDto.createIncomeDto(target);
+    }
+
+    // transfer service
+    @Transactional
+    public transferDto createTransfer(transferDto target){
+        account fromAccount = accountRepository.findById(target.getFromAccount())
+                .orElseThrow(() -> new IllegalArgumentException("From Account not found"));
+        account toAccount = accountRepository.findById(target.getToAccount())
+                .orElseThrow(() -> new IllegalArgumentException("From Account not found"));
+        if (fromAccount.getId().equals(toAccount.getId())) {
+            throw new IllegalArgumentException("Cannot transfer to the same account");
+        }
+
+        if (fromAccount.getBalance() < target.getAmount()) {
+            throw new IllegalArgumentException("Insufficient balance in fromAccount");
+        }
+
+        //update balances
+        fromAccount.setBalance(fromAccount.getBalance() - target.getAmount());
+        toAccount.setBalance(toAccount.getBalance() + target.getAmount());
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+
+        transfer newTransfer = new transfer();
+        newTransfer.setFromAccount(fromAccount);
+        newTransfer.setToAccount(toAccount);
+        newTransfer.setAmount(target.getAmount());
+        newTransfer.setDate(target.getDate());
+
+
+        transfer saved = transferRepository.save(newTransfer);
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+        // transferRepository.save(newTransfer);
+
+        return transferDto.createTransferDto(saved);
+    }
+
+    public transferDto updateTransfer(Long id, transferDto dto) {
+        transfer target = transferRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Transfer not found"));
+
+        //reverse old transfer
+        account oldFromAccount = target.getFromAccount();
+        account oldtoAccount = target.getToAccount();
+        double oldAmount = target.getAmount();
+        oldFromAccount.setBalance(oldFromAccount.getBalance() + oldAmount);
+        oldtoAccount.setBalance(oldtoAccount.getBalance() - oldAmount);
+
+        //apply new transfer
+        account newFromAccount = accountRepository.findById(dto.getFromAccount())
+                .orElseThrow(() -> new IllegalArgumentException("From Account not found"));
+        account newToAccount = accountRepository.findById(dto.getToAccount())
+                .orElseThrow(() -> new IllegalArgumentException("To Account not found"));
+
+        newFromAccount.setBalance(newFromAccount.getBalance() - dto.getAmount());
+        newToAccount.setBalance(newToAccount.getBalance() + dto.getAmount());
+
+        target.setFromAccount(newFromAccount);
+        target.setToAccount(newToAccount);
+        target.setAmount(dto.getAmount());
+        target.setDate(dto.getDate());
+
+
+        accountRepository.saveAll(List.of(oldFromAccount, oldtoAccount, newFromAccount, newToAccount));
+        return transferDto.createTransferDto(transferRepository.save(target));
+
+    }
+
+    @Transactional
+    public transferDto deleteTransfer(Long id) {
+        // 1. 댓글 조회 및 예외 발생
+        transfer target = transferRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("삭제 실패! " +
+                        "대상이 없습니다."));
+
+
+        account fromAccount = target.getFromAccount();
+        account toAccount = target.getToAccount();
+
+        fromAccount.setBalance(fromAccount.getBalance() + target.getAmount());
+        toAccount.setBalance(toAccount.getBalance() - target.getAmount());
+        accountRepository.saveAll(List.of(fromAccount, toAccount));
+
+        // 2. 댓글 삭제
+        transferRepository.delete(target);
+
+        // 3. 삭제 댓글을 DTO로 변환 및 반환
+        return transferDto.createTransferDto(target);
     }
 }

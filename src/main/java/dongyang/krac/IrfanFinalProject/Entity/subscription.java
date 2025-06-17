@@ -25,6 +25,8 @@ public class subscription {
     @Column
     private LocalDate startdate;
     @Column
+    private LocalDate lastChargedDate;
+    @Column
     private String reccurrent;
 
     @ManyToOne

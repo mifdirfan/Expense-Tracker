@@ -6,25 +6,240 @@
     <table class="table table-striped-columns table-bordered table-hover">
         <thead>
         <tr>
-            <th scope="col">Id</th>
+
             <th scope="col">Amount</th>
             <th scope="col">Date</th>
             <th scope="col">Recipient Account</th>
             <th scope="col">Sender Account</th>
+            <th scope="col">Actions</th> <!-- added -->
         </tr>
         </thead>
         <tbody>
         {{#transferList}}
             <tr>
-                <th scope="row">{{id}}</th>
+
                 <td>₩{{amount}}</td>
                 <td>{{date}}</td>
                 <td>{{toAccount.name}}</td>
                 <td>{{fromAccount.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#transfer-edit-modal"
+                            data-bs-id="{{id}}"
+                            data-bs-amount="{{amount}}"
+                            data-bs-date="{{date}}"
+                            data-bs-fromAccount-id="{{fromAccount.name}}"
+                            data-bs-toAccount-id="{{toAccount.name}}">Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm transfer-delete-btn" data-income-id="{{id}}">Delete</button>
+                </td>
             </tr>
         {{/transferList}}
         </tbody>
     </table>
+
+    <br/><hr/><br/>
+
+    <h2>Add Transfer</h2>
+    <form>
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-md-6">
+
+                <div class="mb-3">
+                    <label for="transferAmount" class="form-label">Amount</label>
+                    <input type="number" class="form-control w-75" id="transferAmount" placeholder="in ₩">
+                </div>
+                <div class="mb-3">
+                    <label for="transferDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="transferDate">
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-md-6">
+
+                <div class="mb-3">
+                    <label for="fromAccountSelect" class="form-label">From Account</label>
+                    <select class="form-select w-75" id="fromAccountSelect">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="toAccountSelect" class="form-label">To Account</label>
+                    <select class="form-select w-75" id="toAccountSelect">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
+            </div>
+        </div>
+    </form>
+
 </div>
 
 {{>layout/footer}}
+
+<script>
+    {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault(); // prevent full page reload
+
+            const amount = document.getElementById("transferAmount").value;
+            const date = document.getElementById("transferDate").value;
+            const fromAccount = document.getElementById("fromAccountSelect").value;
+            const toAccount = document.getElementById("toAccountSelect").value;
+
+
+
+            const data = {
+                amount: parseFloat(amount),
+                date: date,
+                fromAccount: fromAccount,
+                toAccount: toAccount
+            };
+
+            fetch("/transfer/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (!response.ok) {
+                    alert("Failed to submit transfer.");
+                    return;
+                }
+                alert("Transfer added successfully!");
+                window.location.reload();
+            });
+        });
+    }
+</script>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="transfer-edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Income</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-transfer-id">
+
+                <div class="mb-3">
+                    <label>Amount</label>
+                    <input type="number" class="form-control" id="edit-transfer-amount">
+                </div>fer
+                <div class="mb-3">
+                    <label for="transferDate" class="form-label">Date</label>
+                    <input type="date" class="form-control w-75" id="transferDate">
+                </div>
+                <div class="mb-3">
+                    <label>From Account</label>
+                    <select class="form-select w-75" id="edit-transfer-FromAccount">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>To Account</label>
+                    <select class="form-select w-75" id="edit-transfer-toAccount">
+                        <option selected>Choose Bank account</option>
+                        {{#accountList}}
+                            <option value="{{id}}">{{name}} - {{type}}</option>
+                        {{/accountList}}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="transfer-update-btn" class="btn btn-success">Update</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Handle DELETE
+        document.querySelectorAll(".transfer-delete-btn").forEach(btn => {
+            btn.addEventListener("click", event => {
+                const id = event.target.getAttribute("data-transfer-id");
+                fetch(`/transfer/${id}`, { method: "DELETE" })
+                        .then(res => {
+                            if (!res.ok) {
+                                alert("Failed to delete transfer.");
+                                return;
+                            }
+                            alert("Transfer deleted.");
+                            window.location.reload();
+                        });
+            });
+        });
+
+        // Handle OPENING modal and prefill data
+        const transferEditModal = document.querySelector("#transfer-edit-modal");
+        if (transferEditModal) {
+            transferEditModal.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget;
+                document.querySelector("#edit-transfer-id").value = btn.getAttribute("data-bs-id");
+                document.querySelector("#edit-transfer-amount").value = btn.getAttribute("data-bs-amount");
+                document.querySelector("#transferDate").value = btn.getAttribute("data-bs-date");
+                document.querySelector("#edit-transfer-FromAccount").value = btn.getAttribute("data-bs-fromAccount-id");
+                document.querySelector("#edit-transfer-toAccount").value = btn.getAttribute("data-bs-toAccount-id");
+            });
+        }
+
+        // Handle UPDATE from modal
+        const updateBtn = document.querySelector("#transfer-update-btn");
+        if (updateBtn) {
+            updateBtn.addEventListener("click", () => {
+                const id = document.querySelector("#edit-transfer-id").value;
+                const amount = document.querySelector("#edit-transfer-amount").value;
+                const date = document.querySelector("#transferDate").value;
+                const fromAccount = document.querySelector("#edit-transfer-fromAccount").value;
+                const toAccount = document.querySelector("#edit-transfer-toAccount").value;
+
+                const data = {
+                    id,
+                    name,
+                    amount: parseFloat(amount),
+                    date: date,
+                    fromAccount: fromAccount,
+                    toAccount: toAccount
+                };
+
+                fetch(`/transfer/edit/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    alert(response.ok
+                            ? "transfer updated successfully."
+                            : "Failed to update transfer.");
+                    window.location.reload();
+                });
+            });
+        }
+
+    });
+</script>

@@ -7,10 +7,12 @@ import dongyang.krac.IrfanFinalProject.Repository.accountRepository;
 import dongyang.krac.IrfanFinalProject.Repository.subscriptionRepository;
 import dongyang.krac.IrfanFinalProject.dto.subscriptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class subscriptionService {
@@ -65,6 +67,42 @@ public class subscriptionService {
 
         subscription updated = subscriptionRepository.save(target);
         return subscriptionDto.createsubscripiotnDto(updated);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 2 * * *") // Runs daily at 2AM
+    public void autoChargeSubscriptions() {
+        LocalDate today = LocalDate.now();
+
+        List<subscription> all = (List<subscription>) subscriptionRepository.findAll();
+
+        for (subscription s : all) {
+            LocalDate lastDate = s.getLastChargedDate();
+            LocalDate nextDue;
+
+            switch (s.getReccurrent().toUpperCase()) {
+                case "DAILY" -> nextDue = lastDate.plusDays(1);
+                case "WEEKLY" -> nextDue = lastDate.plusWeeks(1);
+                case "MONTHLY" -> nextDue = lastDate.plusMonths(1);
+                default -> {
+                    continue; // Skip if frequency is unknown
+                }
+            }
+
+            if (!today.isBefore(nextDue)) {
+                account acc = s.getAccounts();
+
+                // Prevent overdraft (optional)
+                if (acc.getBalance() >= s.getAmount()) {
+                    acc.setBalance(acc.getBalance() - s.getAmount());
+                    s.setLastChargedDate(today);
+                    accountRepository.save(acc);
+                    subscriptionRepository.save(s);
+                    System.out.println("Charged " + s.getName() + ": ₩" + s.getAmount() + " on " + LocalDate.now());
+
+                }
+            }
+        }
     }
 
 
