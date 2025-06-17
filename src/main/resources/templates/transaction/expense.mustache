@@ -5,7 +5,7 @@
     <table class="table table-striped-columns table-bordered table-hover">
         <thead>
         <tr>
-            <th scope="col">Id</th>
+
             <th scope="col">Description</th>
             <th scope="col">Amount</th>
             <th scope="col">Date</th>
@@ -17,9 +17,9 @@
         <tbody>
         {{#expenseList}}
             <tr>
-                <th scope="row">{{id}}</th>
+
                 <td>{{description}}</td>
-                <td>{{amount}}</td>
+                <td>₩{{amount}}</td>
                 <td>{{date}}</td>
                 <td>{{category.name}}</td>
                 <td>{{accounts.name}}</td>

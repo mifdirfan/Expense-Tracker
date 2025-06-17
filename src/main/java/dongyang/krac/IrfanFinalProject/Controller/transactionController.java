@@ -34,8 +34,8 @@ public class transactionController {
     @GetMapping("/expense")
     public String expense(Model mo) {
         List<expense> expenseList = (List<expense>)expenseRepository.findAll();
-        List<category> categoryList = (List<category>)categoryRepository.findByType("EXPENSE");
-        List<account> accountList = (List<account>)accountRepository.findAll();
+        List<category> categoryList = (List<category>)categoryRepository.findByTypeAndActiveTrue("EXPENSE");
+        List<account> accountList = (List<account>)accountRepository.findByActiveTrue();
 
         mo.addAttribute("expenseList", expenseList);
         mo.addAttribute("categoryList", categoryList);
@@ -45,8 +45,8 @@ public class transactionController {
     @GetMapping("/incomes")
     public String income(Model mo) {
         List<income> incomeList = (List<income>)incomeRepository.findAll();
-        List<category> categoryList = (List<category>)categoryRepository.findByType("INCOME");
-        List<account> accountList = (List<account>)accountRepository.findAll();
+        List<category> categoryList = (List<category>)categoryRepository.findByTypeAndActiveTrue("INCOME");
+        List<account> accountList = (List<account>)accountRepository.findByActiveTrue();
 
         mo.addAttribute("categoryList", categoryList);
         mo.addAttribute("accountList", accountList);

@@ -8,15 +8,14 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="/subscriptions/{{id}}">{{name}}</a>
+                            {{name}}
                         </h5>
                         <p class="card-text">
-                            <strong>Amount:</strong> <a href="/subscriptions/{{id}}">{{amount}}</a><br/>
-                            <strong>Due:</strong> <a href="/subscriptions/{{id}}">{{startdate}}</a>
+                            <strong>Amount:</strong> ₩{{amount}}<br/>
+                            <strong>Due:</strong> ₩{{startdate}}
                         </p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <small class="text-muted">ID: {{id}}</small>
                         <div>
                             <button class="btn btn-sm btn-outline-primary subscription-edit-btn"
                                     data-bs-toggle="modal"

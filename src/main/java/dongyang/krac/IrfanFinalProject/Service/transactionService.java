@@ -29,6 +29,13 @@ public class transactionService {
         category category = categoryRepository.findById((target.getCategory()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category"));
 
+        if (!category.isActive()) {
+            throw new IllegalArgumentException("Cannot use an inactive category");
+        }
+        if (!account.isActive()) {
+            throw new IllegalArgumentException("Cannot assign to an inactive account.");
+        }
+
         expense newExpense = new expense();
         newExpense.setDescription(target.getDescription());
         newExpense.setAmount(target.getAmount());
@@ -61,6 +68,13 @@ public class transactionService {
 
         category category = categoryRepository.findById(dto.getCategory())
                 .orElseThrow(() -> new IllegalArgumentException("category not found"));
+
+        if (!category.isActive()) {
+            throw new IllegalArgumentException("Cannot use an inactive category");
+        }
+        if (!newAccount.isActive()) {
+            throw new IllegalArgumentException("Cannot assign to an inactive account");
+        }
 
         // Deduct new amount from new account
         newAccount.setBalance(newAccount.getBalance() - dto.getAmount());
@@ -104,6 +118,14 @@ public class transactionService {
         category category = categoryRepository.findById((target.getCategory()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category"));
 
+        if (!category.isActive()) {
+            throw new IllegalArgumentException("Cannot use an inactive category");
+        }
+        if (!account.isActive()) {
+            throw new IllegalArgumentException("Cannot assign to an inactive account.");
+        }
+
+
         income newIncome = new income();
         newIncome.setDescription(target.getDescription());
         newIncome.setAmount(target.getAmount());
@@ -136,6 +158,13 @@ public class transactionService {
 
         category category = categoryRepository.findById(dto.getCategory())
                 .orElseThrow(() -> new IllegalArgumentException("category not found"));
+
+        if (!category.isActive()) {
+            throw new IllegalArgumentException("Cannot use an inactive category");
+        }
+        if (!newAccount.isActive()) {
+            throw new IllegalArgumentException("Cannot assign to an inactive account");
+        }
 
         // Add new amount from new account
         newAccount.setBalance(newAccount.getBalance() + dto.getAmount());

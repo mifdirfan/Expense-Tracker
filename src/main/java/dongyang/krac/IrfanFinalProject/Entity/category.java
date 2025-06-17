@@ -1,10 +1,7 @@
 package dongyang.krac.IrfanFinalProject.Entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -22,6 +19,9 @@ public class category {
     private String name; // e.g., "Food & Drinks"
     @Column
     private String type; // "EXPENSE" or "INCOME"
-    @Column
-    private Double budget; // optional
+    @Column(nullable = false)
+    private boolean active = true;
+    @Transient
+    private Double totalAmount;
+
 }

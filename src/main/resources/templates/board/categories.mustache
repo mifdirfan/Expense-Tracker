@@ -1,76 +1,291 @@
 {{>layout/header}}
 
 <div class="container px-5">
-    <!--decide nak tak add subscriptions/id-->
-    <h2>Categories</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {{#categoryList}}
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="/category/{{id}}">{{name}}</a>
-                        </h5>
-                        <p class="card-text">
-                            <strong>Limit</strong> <a href="/account/{{id}}">{{balance}}</a><br/>
-                            <strong>Type:</strong> <a href="/account/{{id}}">{{type}}</a>
-                        </p>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <small class="text-muted">ID: {{id}}</small>
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary account-edit-btn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#account-edit-modal"
-                                    data-bs-id="{{id}}"
-                                    data-bs-name="{{name}}"
-                                    data-bs-balance="{{balance}}"
-                                    data-bs-type="{{type}}">
-                                Edit
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger account-delete-btn" data-account-id="{{id}}">
-                                Delete
-                            </button>
+    <h2 class="mb-4">Categories</h2>
+
+    <div class="row">
+        <!-- Left side: Expense categories -->
+        <div class="col-md-6 border-end pe-">
+            <h4>Expense Categories</h4>
+            <div class="row row-cols-1 g-4">
+                {{#expenseList}}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{name}}
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Type:</strong> {{type}}<br/>
+                                    <strong>Total spent : </strong> ₩{{totalAmount}}
+                                </p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <div>
+<!--                                    <button class="btn btn-sm btn-outline-primary category-edit-btn"-->
+<!--                                            data-bs-toggle="modal"-->
+<!--                                            data-bs-target="#category-edit-modal"-->
+<!--                                            data-bs-id="{{id}}"-->
+<!--                                            data-bs-name="{{name}}"-->
+<!--                                            data-bs-type="{{type}}">-->
+<!--                                        Edit</button>-->
+                                    <button class="btn btn-sm btn-outline-danger category-delete-btn" data-category-id="{{id}}">Delete</button>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input toggle-active-switch"
+                                               type="checkbox"
+                                               id="category-switch-{{id}}"
+                                               data-category-id="{{id}}"
+                                               {{#active}}checked{{/active}}>
+                                        <label class="form-check-label" for="category-switch-{{id}}">
+                                            {{#active}}Active{{/active}}{{^active}}Inactive{{/active}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {{/expenseList}}
             </div>
-        {{/categoryList}}
+        </div>
+
+        <!-- Right side: Income categories -->
+        <div class="col-md-6 ps-4">
+            <h4>Income Categories</h4>
+            <div class="row row-cols-1 g-4">
+                {{#incomeList}}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{name}}
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Type:</strong> {{type}}<br/>
+                                    <strong>Total earned : </strong> ₩{{totalAmount}}
+                                </p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <div>
+<!--                                    <button class="btn btn-sm btn-outline-primary category-edit-btn"-->
+<!--                                            data-bs-toggle="modal"-->
+<!--                                            data-bs-target="#category-edit-modal"-->
+<!--                                            data-bs-id="{{id}}"-->
+<!--                                            data-bs-name="{{name}}"-->
+<!--                                            data-bs-type="{{type}}">-->
+<!--                                        Edit</button>-->
+                                    <button class="btn btn-sm btn-outline-danger category-delete-btn" data-category-id="{{id}}">Delete</button>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input toggle-active-switch"
+                                               type="checkbox"
+                                               id="category-switch-{{id}}"
+                                               data-category-id="{{id}}"
+                                               {{#active}}checked{{/active}}>
+                                        <label class="form-check-label" for="category-switch-{{id}}">
+                                            {{#active}}Active{{/active}}{{^active}}Inactive{{/active}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/incomeList}}
+            </div>
+        </div>
     </div>
+
     <br/><hr/><br/>
 
-
-    <h2>Add Account</h2>
+    <h2>Add Category</h2>
     <form>
         <div class="row">
-            <!-- Left column -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="accountName" class="form-label">Name</label>
-                    <textarea class="form-control w-75" id="accountName" rows="2"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="accountBalance" class="form-label">Amount</label>
-                    <input type="number" class="form-control w-75" id="accountBalance" placeholder="in ₩">
-                </div>
+            <div class="mb-3">
+                <label for="categoryName" class="form-label">Category Name</label>
+                <input type="text" class="form-control w-50" id="categoryName">
             </div>
-
-            <!-- Right column -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="accountName" class="form-label">Type</label>
-                    <textarea class="form-control w-75" id="accountType" rows="2" placeholder="Credit/Debit etc."></textarea>
+            <div class="mb-3">
+                <label class="form-label">Type</label><br/>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="type" id="EXPENSE" value="EXPENSE">
+                    <label class="form-check-label" for="EXPENSE">EXPENSE</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="type" id="INCOME" value="INCOME">
+                    <label class="form-check-label" for="INCOME">INCOME</label>
                 </div>
             </div>
         </div>
 
         <!-- Submit Button -->
-        <div class="text-center mt-4">
+        <div class="text-center mt-4 ">
             <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
         </div>
     </form>
 
 
-
 </div>
+
+
+
 {{>layout/footer}}
+
+<script>
+        {
+            const form = document.querySelector("form");
+            form.addEventListener("submit", (event) => {
+                event.preventDefault(); // prevent full page reload
+
+                const name = document.getElementById("categoryName").value;
+                const type = document.querySelector('input[name="type"]:checked')?.value;
+
+
+                const data = {
+                name: name,
+                type: type
+                };
+
+                fetch("/categories/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (!response.ok) {
+                        alert("Failed to submit category.");
+                        return;
+                    }
+                    alert("Category added successfully!");
+                    window.location.reload();
+                });
+            });
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".toggle-active-switch").forEach(switchEl => {
+                switchEl.addEventListener("change", function () {
+                    const categoryId = this.dataset.categoryId;
+                    const newStatus = this.checked;
+
+                    fetch(`/categories/toggle-active/${categoryId}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ active: newStatus })
+                    }).then(response => {
+                        if (!response.ok) {
+                            alert("Failed to update status.");
+                            // Revert toggle if update failed
+                            this.checked = !newStatus;
+                            return;
+                        }
+                        window.location.reload(); // optional: to refresh UI
+                    });
+                });
+            });
+        });
+
+
+</script>
+
+<!-- Modal -->
+<!--<div class="modal fade" id="category-edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title">Edit Category</h5>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <input type="hidden" id="edit-category-id">-->
+
+<!--                <div class="mb-3">-->
+<!--                    <label>Name</label>-->
+<!--                    <input type="text" class="form-control" id="edit-category-name">-->
+<!--                </div>-->
+
+<!--                <div class="mb-3">-->
+<!--                    <label class="form-label">Type</label><br/>-->
+<!--                    <div class="form-check form-check-inline">-->
+<!--                        <input class="form-check-input" type="radio" name="type" id="EXPENSE" value="EXPENSE">-->
+<!--                        <label class="form-check-label" for="EXPENSE">EXPENSE</label>-->
+<!--                    </div>-->
+<!--                    <div class="form-check form-check-inline">-->
+<!--                        <input class="form-check-input" type="radio" name="type" id="INCOME" value="INCOME">-->
+<!--                        <label class="form-check-label" for="INCOME">INCOME</label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button id="category-update-btn" class="btn btn-success">Update</button>-->
+<!--                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Handle DELETE
+        document.querySelectorAll(".category-delete-btn").forEach(btn => {
+            btn.addEventListener("click", event => {
+                const id = event.target.getAttribute("data-category-id");
+                fetch(`/categories/${id}`, { method: "DELETE" })
+                        .then(res => {
+                            if (!res.ok) {
+                                alert("Make sure you have no transactions associated with this category.");
+                                return;
+                            }
+                            alert("Categories deleted.");
+                            window.location.reload();
+                        });
+            });
+        });
+
+    //     // Handle OPENING modal and prefill data
+    //     const categoryEditModal = document.querySelector("#category-edit-modal");
+    //     if (categoryEditModal) {
+    //         categoryEditModal.addEventListener("show.bs.modal", function (event) {
+    //             const btn = event.relatedTarget;
+    //             document.querySelector("#edit-category-id").value = btn.getAttribute("data-bs-id");
+    //             document.querySelector("#edit-category-name").value = btn.getAttribute("data-bs-name");
+    //
+    //             const type = btn.getAttribute("data-bs-type");
+    //             if (type) {
+    //                 document.querySelectorAll("input[name='type']").forEach(r => {
+    //                     r.checked = r.value === type;
+    //                 });
+    //             }
+    //         });
+    //     }
+    //
+    //     // Handle UPDATE from modal
+    //     const updateBtn = document.querySelector("#category-update-btn");
+    //     if (updateBtn) {
+    //         updateBtn.addEventListener("click", () => {
+    //             const id = document.querySelector("#edit-subscription-id").value;
+    //             const name = document.querySelector("#edit-subscription-name").value;
+    //             const type = document.querySelector("input[name='type']:checked")?.value;
+    //
+    //             const data = {
+    //                 id,
+    //                 name,
+    //                 type
+    //             };
+    //
+    //             fetch(`/categories/edit/${id}`, {
+    //                 method: "PATCH",
+    //                 headers: { "Content-Type": "application/json" },
+    //                 body: JSON.stringify(data)
+    //             }).then(response => {
+    //                 alert(response.ok
+    //                         ? "Category updated successfully."
+    //                         : "Failed to update category.");
+    //                 window.location.reload();
+    //             });
+    //         });
+    //     }
+    //
+    });
+</script>
+

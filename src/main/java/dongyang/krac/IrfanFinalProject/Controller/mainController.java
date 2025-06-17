@@ -18,10 +18,10 @@ public class mainController {
 //    public String account() {
 //        return "board/account";
 //    }
-    @GetMapping("/categories")
-    public String categories() {
-        return "board/categories";
-    }
+//    @GetMapping("/categories")
+//    public String categories() {
+//        return "board/categories";
+//    }
 //    @GetMapping("/expense")
 //    public String expenses() {
 //        return "transaction/expense";

@@ -23,5 +23,7 @@ public class account {
     private String type;
     @Column
     private double balance;
+    @Column(nullable = false)
+    private boolean active = true;
 
 }

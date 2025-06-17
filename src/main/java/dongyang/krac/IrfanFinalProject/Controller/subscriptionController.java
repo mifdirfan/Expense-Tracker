@@ -30,7 +30,7 @@ public class subscriptionController {
     @GetMapping("/subscriptions")
     public String subscription(Model mo) {
         List<subscription> subsList = (List<subscription>)subscriptionRepository.findAll();
-        List<account> accounts = (List<account>)accountRepository.findAll();
+        List<account> accounts = (List<account>)accountRepository.findByActiveTrue();
         mo.addAttribute("subsList", subsList);
         mo.addAttribute("accountList", accounts);
         return "board/subscriptions";

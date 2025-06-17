@@ -8,15 +8,14 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="/account/{{id}}">{{name}}</a>
+                            {{name}}
                         </h5>
                         <p class="card-text">
-                            <strong>Account Balance:</strong> <a href="/account/{{id}}">{{balance}}</a><br/>
-                            <strong>Type:</strong> <a href="/account/{{id}}">{{type}}</a>
+                            <strong>Account Balance:</strong> ₩{{balance}}<br/>
+                            <strong>Type:</strong> {{type}}
                         </p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <small class="text-muted">ID: {{id}}</small>
                         <div>
                             <button class="btn btn-sm btn-outline-primary account-edit-btn"
                                      data-bs-toggle="modal"
@@ -30,6 +29,16 @@
                             <button class="btn btn-sm btn-outline-danger account-delete-btn" data-account-id="{{id}}">
                                 Delete
                             </button>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input toggle-active-switch"
+                                       type="checkbox"
+                                       id="account-switch-{{id}}"
+                                       data-account-id="{{id}}"
+                                       {{#active}}checked{{/active}}>
+                                <label class="form-check-label" for="account-switch-{{id}}">
+                                    {{#active}}Active{{/active}}{{^active}}Inactive{{/active}}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,6 +112,30 @@
                 }
                 alert("Accounts added successfully!");
                 window.location.reload();
+            });
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".toggle-active-switch").forEach(switchEl => {
+                switchEl.addEventListener("change", function () {
+                    const accountId = this.dataset.accountId;
+                    const newStatus = this.checked;
+
+                    fetch(`/account/toggle-active/${accountId}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ active: newStatus })
+                    }).then(response => {
+                        if (!response.ok) {
+                            alert("Failed to update status.");
+                            // Revert toggle if update failed
+                            this.checked = !newStatus;
+                            return;
+                        }
+                        window.location.reload(); // optional: to refresh UI
+                    });
+                });
             });
         });
     }

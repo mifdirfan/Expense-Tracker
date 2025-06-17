@@ -1,6 +1,7 @@
 package dongyang.krac.IrfanFinalProject.Controller;
 
 import dongyang.krac.IrfanFinalProject.Entity.account;
+import dongyang.krac.IrfanFinalProject.Entity.category;
 import dongyang.krac.IrfanFinalProject.Repository.accountRepository;
 import dongyang.krac.IrfanFinalProject.Service.accountService;
 import dongyang.krac.IrfanFinalProject.dto.accountDto;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class accountController {
@@ -41,6 +43,16 @@ public class accountController {
 
         accountDto updatedDto = accountService.update(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+    @PatchMapping("/account/toggle-active/{id}")
+    public ResponseEntity<?> toggleActive(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
+        account target = accountRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        target.setActive(body.get("active"));
+        accountRepository.save(target);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/account/{id}")
