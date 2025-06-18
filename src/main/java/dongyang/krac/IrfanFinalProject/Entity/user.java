@@ -3,6 +3,8 @@ package dongyang.krac.IrfanFinalProject.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,4 +18,9 @@ public class user {
     @Column(unique = true)
     private String username;
     private String password;
+
+
+    public boolean isPresent() {
+        return true;
+    }
 }

@@ -2,13 +2,17 @@ package dongyang.krac.IrfanFinalProject.Controller;
 
 import dongyang.krac.IrfanFinalProject.Entity.account;
 import dongyang.krac.IrfanFinalProject.Entity.category;
+import dongyang.krac.IrfanFinalProject.Entity.user;
 import dongyang.krac.IrfanFinalProject.Repository.accountRepository;
+import dongyang.krac.IrfanFinalProject.Repository.userRepository;
 import dongyang.krac.IrfanFinalProject.Service.accountService;
 import dongyang.krac.IrfanFinalProject.dto.accountDto;
 import dongyang.krac.IrfanFinalProject.dto.subscriptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +26,20 @@ public class accountController {
     accountRepository accountRepository;
     @Autowired
     private accountService accountService;
+    @Autowired
+    private userRepository userRepository;
 
     @GetMapping("/account")
     public String account(Model mo) {
-        List<account> accounts = (List<account>)accountRepository.findAll();
+        user currentUser = getCurrentUser();
+        List<account> accounts = accountRepository.findByUser(currentUser);
         mo.addAttribute("accountList", accounts);
         return "board/account";
+    }
+
+    private user getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(auth.getName());
     }
 
     @PostMapping("/account/add")

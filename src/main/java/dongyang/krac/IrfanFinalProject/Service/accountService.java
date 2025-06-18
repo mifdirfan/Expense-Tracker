@@ -2,10 +2,14 @@ package dongyang.krac.IrfanFinalProject.Service;
 
 import dongyang.krac.IrfanFinalProject.Entity.account;
 import dongyang.krac.IrfanFinalProject.Entity.subscription;
+import dongyang.krac.IrfanFinalProject.Entity.user;
 import dongyang.krac.IrfanFinalProject.Repository.accountRepository;
+import dongyang.krac.IrfanFinalProject.Repository.userRepository;
 import dongyang.krac.IrfanFinalProject.dto.accountDto;
 import dongyang.krac.IrfanFinalProject.dto.subscriptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,8 @@ public class accountService {
 
     @Autowired
     private accountRepository accountRepository;
+    @Autowired
+    private userRepository userRepository;
 
     @Transactional
     public accountDto create(accountDto target){
@@ -25,8 +31,10 @@ public class accountService {
         newAccount.setBalance(target.getBalance());
         newAccount.setType(target.getType());
 
-        account saved = accountRepository.save(newAccount);
+        // 👇 Associate with logged-in user
+        newAccount.setUser(getCurrentUser());
 
+        account saved = accountRepository.save(newAccount);
         return accountDto.createAccountDto(saved);
     }
 
@@ -55,5 +63,10 @@ public class accountService {
 
         // 3. 삭제 댓글을 DTO로 변환 및 반환
         return accountDto.createAccountDto(target);
+    }
+
+    public user getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(auth.getName());
     }
 }

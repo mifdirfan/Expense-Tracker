@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,14 +35,22 @@ public class mainController {
     private searchService searchService;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, Principal principal) {
         model.addAttribute("accounts", accountRepository.findTop3ByOrderByIdDesc());
         model.addAttribute("subscriptions", subscriptionRepository.findTop3ByOrderByStartdateDesc());
         model.addAttribute("expenses", expenseRepository.findTop3ByOrderByDateDesc());
         model.addAttribute("incomes", incomeRepository.findTop3ByOrderByDateDesc());
         model.addAttribute("transfers", transferRepository.findTop3ByOrderByDateDesc());
         model.addAttribute("categories", categoryRepository.findTop3ByOrderByIdDesc());
-        return "home";
+
+        if (principal != null) {
+            // User is logged in → Show dashboard
+            model.addAttribute("username", principal.getName());
+            return "home"; // or your main dashboard page
+        } else {
+            // Not logged in → Show home page
+            return "infoPage";
+        }
     }
 
     @GetMapping("/api/search")

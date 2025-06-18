@@ -12,4 +12,5 @@ public interface accountRepository extends CrudRepository<account, Long> {
     List<account> findByActiveTrue();
     List<account> findTop3ByOrderByIdDesc();
     List<account> findByNameContainingIgnoreCase(String keyword);
+    List<account> findByUser(user user);
 }

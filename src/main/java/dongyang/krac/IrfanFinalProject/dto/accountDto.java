@@ -13,12 +13,14 @@ public class accountDto {
     private String name;
     private String type;
     private double balance;
+    private Long userId; // optional for future use
 
-    public accountDto(Long id, String name, double balance, String type) {
+    public accountDto(Long id, String name, double balance, String type, Long userId) {
         this.id = id;
         this.name = name;
         this.balance = balance;
         this.type = type;
+        this.userId = userId;
     }
 
     public static accountDto createAccountDto(account target) {
@@ -26,7 +28,8 @@ public class accountDto {
                 target.getId(),
                 target.getName(),
                 target.getBalance(),
-                target.getType());
+                target.getType(),
+                target.getUser().getId());
     }
 }
 

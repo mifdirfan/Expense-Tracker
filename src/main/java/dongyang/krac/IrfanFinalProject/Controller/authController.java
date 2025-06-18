@@ -6,6 +6,7 @@ import dongyang.krac.IrfanFinalProject.Repository.userRepository;
 import dongyang.krac.IrfanFinalProject.Service.authService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,20 +25,7 @@ public class authController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String loginForm(@RequestParam String username,
-                            @RequestParam String password,
-                            HttpSession session,
-                            Model model) {
-        user user = authService.authenticate(username, password);
-        if (user != null) {
-            session.setAttribute("loggedInUser", user);
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Invalid credentials");
-            return "login";
-        }
-    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
@@ -55,8 +43,14 @@ public class authController {
                            Model model) {
         // Check if user already exists
         if (userRepository.findByUsername(username) != null) {
-            model.addAttribute("error", "Username already exists");
-            return "register";
+            if (userRepository.findByUsername(username).isPresent()) {
+                return "redirect:/register?error";
+            }
+            user newUser = new user();
+            newUser.setUsername(username);
+            newUser.setPassword(new BCryptPasswordEncoder().encode(password));
+            userRepository.save(newUser);
+            return "redirect:/";
         }
 
         user newUser = new user();
