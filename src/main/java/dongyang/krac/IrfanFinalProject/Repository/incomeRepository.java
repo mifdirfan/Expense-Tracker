@@ -8,4 +8,5 @@ import java.util.List;
 public interface incomeRepository extends CrudRepository<income, Long> {
     List<income> findByCategoryId(Long accountId);
     List<income> findTop3ByOrderByDateDesc();
+    List<income> findByDescriptionContainingIgnoreCase(String keyword);
 }

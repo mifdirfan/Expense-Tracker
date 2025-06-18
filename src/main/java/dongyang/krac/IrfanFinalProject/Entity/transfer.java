@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 public class transfer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private LocalDate date;
@@ -29,4 +29,5 @@ public class transfer {
 
     @Column
     private double amount;
+
 }

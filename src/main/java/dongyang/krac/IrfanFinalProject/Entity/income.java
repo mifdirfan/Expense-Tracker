@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 public class income {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private LocalDate date;
@@ -29,6 +29,7 @@ public class income {
     @ManyToOne
     @JoinColumn(name = "accounts_id")
     private account accounts;
+
 
 
 }

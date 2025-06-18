@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface subscriptionRepository extends CrudRepository<subscription, Long> {
     List<subscription> findTop3ByOrderByStartdateDesc();
+    List<subscription> findByNameContainingIgnoreCase(String keyword);
 }

@@ -192,7 +192,7 @@ public class transactionService {
 
         // Deduct the amount back to the account
         account account = target.getAccounts();
-        account.setBalance(account.getBalance() + target.getAmount());
+        account.setBalance(account.getBalance() - target.getAmount());
         accountRepository.save(account);
 
         // 2. 댓글 삭제

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface transferRepository extends CrudRepository<transfer, Long> {
     List<transfer> findTop3ByOrderByDateDesc();
+    // List<transfer> findByDescriptionContainingIgnoreCase(String keyword);
 }

@@ -1,11 +1,20 @@
 package dongyang.krac.IrfanFinalProject.Controller;
 
 
+import dongyang.krac.IrfanFinalProject.Entity.*;
 import dongyang.krac.IrfanFinalProject.Repository.*;
+import dongyang.krac.IrfanFinalProject.Service.searchService;
+import dongyang.krac.IrfanFinalProject.dto.searchResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class mainController {
@@ -21,6 +30,8 @@ public class mainController {
     private transferRepository transferRepository;
     @Autowired
     private categoryRepository categoryRepository;
+    @Autowired
+    private searchService searchService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -33,6 +44,10 @@ public class mainController {
         return "home";
     }
 
-
+    @GetMapping("/api/search")
+    @ResponseBody
+    public List<searchResultDto> searchApi(@RequestParam("keyword") String keyword) {
+        return searchService.searchAll(keyword); // no user needed
+    }
 
 }

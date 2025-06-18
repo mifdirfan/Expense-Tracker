@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 public class subscription {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String name;
@@ -32,5 +32,7 @@ public class subscription {
     @ManyToOne
     @JoinColumn(name = "accounts_id")
     private account accounts;
+
+
 
 }

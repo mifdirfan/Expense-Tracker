@@ -1,5 +1,6 @@
+<body class="d-flex flex-column min-vh-100">
 {{>layout/header}}
-<div class="container px-5">
+<main class="container px-5 flex-grow-1">
     <!--decide nak tak add subscriptions/id-->
     <h2>Subscriptions</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -12,8 +13,8 @@
                         </h5>
                         <p class="card-text">
                             <strong>Amount:</strong> ₩{{amount}}<br/>
-                            <strong>Due:</strong> ₩{{startdate}}
-                        </p>
+                            <strong>Last payment:</strong> {{lastChargedDate}}<br/>
+                            <strong>{{reccurrent}}</strong>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <div>
@@ -98,8 +99,9 @@
 
 
 
-</div>
+</main>
 {{>layout/footer}}
+</body>
 
 <script>
     {
@@ -110,6 +112,7 @@
             const name = document.getElementById("subscriptionName").value;
             const amount = document.getElementById("subscriptionAmount").value;
             const startdate = document.getElementById("subscriptionDate").value;
+            const lastChargeDate = document.getElementById("subscriptionDate").value;
             const recurrence = document.querySelector('input[name="recurrence"]:checked')?.value;
             const accountId = document.getElementById("accountSelect").value;
 
@@ -117,6 +120,7 @@
                 name: name,
                 amount: parseFloat(amount),
                 startdate: startdate,
+                lastChargedDate: lastChargeDate,
                 reccurrent: recurrence,
                 accounts: parseInt(accountId)
             };

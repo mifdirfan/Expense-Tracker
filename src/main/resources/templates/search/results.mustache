@@ -1,0 +1,74 @@
+<body class="d-flex flex-column min-vh-100">
+{{>layout/header}}
+
+<main class="container px-5 flex-grow-1">
+    <h2 class="mb-4 mt-3">🔍 Search Results</h2>
+
+    <div class="row g-3">
+        {{#accountResults}}
+            <div class="col-md-6">
+                <div class="card border-primary">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">🏦 <a href="/account" class="text-decoration-none text-dark">{{name}}</a></h5>
+                        <p class="card-text"><small class="text-muted">[Account]</small></p>
+                    </div>
+                </div>
+            </div>
+        {{/accountResults}}
+
+        {{#categoryResults}}
+            <div class="col-md-6">
+                <div class="card border-secondary">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">📂 <a href="/category" class="text-decoration-none text-dark">{{name}}</a></h5>
+                        <p class="card-text"><small class="text-muted">[Category]</small></p>
+                    </div>
+                </div>
+            </div>
+        {{/categoryResults}}
+
+        {{#incomeResults}}
+            <div class="col-md-6">
+                <div class="card border-success">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">💰 <a href="/incomes" class="text-decoration-none text-dark">{{description}}</a></h5>
+                        <p class="card-text"><small class="text-muted">[Income]</small></p>
+                    </div>
+                </div>
+            </div>
+        {{/incomeResults}}
+
+        {{#expenseResults}}
+            <div class="col-md-6">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">💸 <a href="/expense" class="text-decoration-none text-dark">{{description}}</a></h5>
+                        <p class="card-text"><small class="text-muted">[Expense]</small></p>
+                    </div>
+                </div>
+            </div>
+        {{/expenseResults}}
+
+        {{#subscriptionResults}}
+            <div class="col-md-6">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">📅 <a href="/subscriptions" class="text-decoration-none text-dark">{{name}}</a></h5>
+                        <p class="card-text"><small class="text-muted">[Subscription]</small></p>
+                    </div>
+                </div>
+            </div>
+        {{/subscriptionResults}}
+
+        {{^accountResults}}{{^categoryResults}}{{^incomeResults}}{{^expenseResults}}{{^subscriptionResults}}
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    No results found. Try a different keyword.
+                </div>
+            </div>
+        {{/subscriptionResults}}{{/expenseResults}}{{/incomeResults}}{{/categoryResults}}{{/accountResults}}
+    </div>
+</main>
+
+{{>layout/footer}}
+</body>

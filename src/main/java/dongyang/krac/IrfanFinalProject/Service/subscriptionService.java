@@ -44,6 +44,7 @@ public class subscriptionService {
         newSubscription.setName(target.getName());
         newSubscription.setAmount(target.getAmount());
         newSubscription.setStartdate(LocalDate.parse(target.getStartdate()));
+        newSubscription.setLastChargedDate(LocalDate.parse(target.getStartdate()));
         newSubscription.setReccurrent(target.getReccurrent());
         newSubscription.setAccounts(account);
 
@@ -104,6 +105,7 @@ public class subscriptionService {
             }
         }
     }
+
 
 
 }

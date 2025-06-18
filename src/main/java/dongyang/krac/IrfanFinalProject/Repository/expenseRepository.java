@@ -8,4 +8,5 @@ import java.util.List;
 public interface expenseRepository extends CrudRepository<expense, Long> {
     List<expense> findByCategoryId(Long accountId);
     List<expense> findTop3ByOrderByDateDesc();
+    List<expense> findByDescriptionContainingIgnoreCase(String keyword);
 }

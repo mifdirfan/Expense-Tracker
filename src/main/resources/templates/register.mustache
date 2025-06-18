@@ -1,6 +1,7 @@
+<body class="d-flex flex-column min-vh-100">
 {{>layout/header}}
 
-<div class="container mt-5">
+<main class="container px-5 flex-grow-1">
     <h2>Register</h2>
 
     {{#error}}<div class="alert alert-danger">{{error}}</div>{{/error}}
@@ -18,6 +19,7 @@
         <button class="btn btn-success">Register</button>
         <a href="/login" class="btn btn-link">Already have an account?</a>
     </form>
-</div>
+</main>
 
 {{>layout/footer}}
+</body>

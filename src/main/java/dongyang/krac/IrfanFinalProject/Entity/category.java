@@ -13,7 +13,7 @@ import lombok.*;
 @Entity
 public class category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String name; // e.g., "Food & Drinks"
@@ -23,5 +23,6 @@ public class category {
     private boolean active = true;
     @Transient
     private Double totalAmount;
+
 
 }

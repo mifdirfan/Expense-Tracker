@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,8 +31,9 @@ public class subscriptionController {
 
     @GetMapping("/subscriptions")
     public String subscription(Model mo) {
-        List<subscription> subsList = (List<subscription>)subscriptionRepository.findAll();
-        List<account> accounts = (List<account>)accountRepository.findByActiveTrue();
+        List<subscription> subsList = (List<subscription>) subscriptionRepository.findAll();
+        List<account> accounts = accountRepository.findByActiveTrue();
+
         mo.addAttribute("subsList", subsList);
         mo.addAttribute("accountList", accounts);
         return "board/subscriptions";

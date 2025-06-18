@@ -1,6 +1,7 @@
+<body class="d-flex flex-column min-vh-100">
 {{>layout/header}}
 
-<div class="container px-5">
+<main class="container px-5 flex-grow-1">
     <h2>Expenses</h2>
     <table class="table table-striped-columns table-bordered table-hover">
         <thead>
@@ -92,13 +93,12 @@
             <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
         </div>
     </form>
-</div>
-
+</main>
 
 
 
 {{>layout/footer}}
-
+</body>
 <script>
     {
         const form = document.querySelector("form");
