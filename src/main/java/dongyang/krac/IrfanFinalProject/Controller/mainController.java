@@ -35,12 +35,13 @@ public class mainController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("accounts", accountRepository.findTop3ByOrderByIdDesc());
+        model.addAttribute("accounts", accountRepository.findTop3ByActiveTrueOrderByIdDesc());
         model.addAttribute("subscriptions", subscriptionRepository.findTop3ByOrderByStartdateDesc());
         model.addAttribute("expenses", expenseRepository.findTop3ByOrderByDateDesc());
         model.addAttribute("incomes", incomeRepository.findTop3ByOrderByDateDesc());
         model.addAttribute("transfers", transferRepository.findTop3ByOrderByDateDesc());
-        model.addAttribute("categories", categoryRepository.findTop3ByOrderByIdDesc());
+        model.addAttribute("expense", categoryRepository.findTop3ByTypeAndActiveTrue("EXPENSE"));
+        model.addAttribute("income", categoryRepository.findTop3ByTypeAndActiveTrue("INCOME"));
         return "home";
     }
 

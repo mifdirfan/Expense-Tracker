@@ -94,11 +94,13 @@
         </div>
     </form>
 </main>
+</body>
+
 
 
 
 {{>layout/footer}}
-</body>
+
 <script>
     {
         const form = document.querySelector("form");
@@ -120,7 +122,7 @@
                 amount: parseFloat(amount),
                 date: date,
                 category: parseInt(category),
-                accountId: parseInt(accountId)
+                accounts: parseInt(accountId)
             };
 
             fetch("/expense/add", {
@@ -215,12 +217,15 @@
         if (expenseEditModal) {
             expenseEditModal.addEventListener("show.bs.modal", function (event) {
                 const btn = event.relatedTarget;
+                console.log("Triggered by:", btn);
+                console.log("ID:", btn.getAttribute("data-bs-id"));
                 document.querySelector("#edit-expense-id").value = btn.getAttribute("data-bs-id");
                 document.querySelector("#edit-expense-description").value = btn.getAttribute("data-bs-description");
                 document.querySelector("#edit-expense-amount").value = btn.getAttribute("data-bs-amount");
                 document.querySelector("#expenseDate").value = btn.getAttribute("data-bs-date");
                 document.querySelector("#edit-expense-category").value = btn.getAttribute("data-bs-category");
                 document.querySelector("#edit-expense-account").value = btn.getAttribute("data-bs-account-id");
+
             });
         }
 
@@ -237,7 +242,7 @@
 
                 const data = {
                     id,
-                    name,
+                    description,
                     amount: parseFloat(amount),
                     date: date,
                     category: parseInt(category),
@@ -259,3 +264,4 @@
 
     });
 </script>
+

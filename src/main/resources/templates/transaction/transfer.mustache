@@ -33,7 +33,7 @@
                             data-bs-date="{{date}}"
                             data-bs-fromAccount-id="{{fromAccount.name}}"
                             data-bs-toAccount-id="{{toAccount.name}}">Edit</button>
-                    <button type="button" class="btn btn-secondary btn-sm transfer-delete-btn" data-income-id="{{id}}">Delete</button>
+                    <button type="button" class="btn btn-secondary btn-sm transfer-delete-btn" data-transfer-id="{{id}}">Delete</button>
                 </td>
             </tr>
         {{/transferList}}
@@ -121,7 +121,7 @@
                 body: JSON.stringify(data)
             }).then(response => {
                 if (!response.ok) {
-                    alert("Failed to submit transfer.");
+                    alert("Check account balance and try again.");
                     return;
                 }
                 alert("Transfer added successfully!");
@@ -155,7 +155,7 @@
                 </div>
                 <div class="mb-3">
                     <label>From Account</label>
-                    <select class="form-select w-75" id="edit-transfer-FromAccount">
+                    <select class="form-select w-75" id="edit-transfer-fromAccount">
                         <option selected>Choose Bank account</option>
                         {{#accountList}}
                             <option value="{{id}}">{{name}} - {{type}}</option>

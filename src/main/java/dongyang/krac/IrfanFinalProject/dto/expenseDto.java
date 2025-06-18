@@ -19,7 +19,7 @@ public class expenseDto {
     private Long category;
     private String categoryName; // for template display
     private double amount;
-    private Long accountId;
+    private Long accounts;
 
     public static expenseDto createExpenseDto(expense target) {
         return new expenseDto(

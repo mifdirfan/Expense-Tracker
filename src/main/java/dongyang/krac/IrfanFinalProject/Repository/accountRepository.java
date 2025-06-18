@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface accountRepository extends CrudRepository<account, Long> {
     List<account> findByActiveTrue();
-    List<account> findTop3ByOrderByIdDesc();
+    List<account> findTop3ByActiveTrueOrderByIdDesc();
     List<account> findByNameContainingIgnoreCase(String keyword);
 }

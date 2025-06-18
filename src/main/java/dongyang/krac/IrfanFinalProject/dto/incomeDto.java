@@ -19,7 +19,7 @@ public class incomeDto {
     private LocalDate date;
     private double amount;
     private Long category;
-    private Long accountId;
+    private Long accounts;
 
     public static incomeDto createIncomeDto(income target) {
         return new incomeDto(
@@ -40,7 +40,7 @@ public class incomeDto {
                 ", date=" + date +
                 ", amount=" + amount +
                 ", source=" + category +
-                ", accounts=" + accountId + '}';
+                ", accounts=" + accounts + '}';
     }
 
 }

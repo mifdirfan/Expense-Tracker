@@ -26,7 +26,7 @@ public class transactionService {
     // expense service
     @Transactional
     public expenseDto createExpense(expenseDto target){
-        account account = accountRepository.findById((target.getAccountId()))
+        account account = accountRepository.findById((target.getAccounts()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Account ID"));
         category category = categoryRepository.findById((target.getCategory()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category"));
@@ -65,7 +65,7 @@ public class transactionService {
         accountRepository.save(oldAccount);
 
 
-        account newAccount = accountRepository.findById(dto.getAccountId())
+        account newAccount = accountRepository.findById(dto.getAccounts())
                 .orElseThrow(() -> new IllegalArgumentException("account not found"));
 
         category category = categoryRepository.findById(dto.getCategory())
@@ -115,7 +115,7 @@ public class transactionService {
     // income service
     @Transactional
     public incomeDto createIncome(incomeDto target){
-        account account = accountRepository.findById((target.getAccountId()))
+        account account = accountRepository.findById((target.getAccounts()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Account ID"));
         category category = categoryRepository.findById((target.getCategory()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category"));
@@ -155,7 +155,7 @@ public class transactionService {
         accountRepository.save(oldAccount);
 
 
-        account newAccount = accountRepository.findById(dto.getAccountId())
+        account newAccount = accountRepository.findById(dto.getAccounts())
                 .orElseThrow(() -> new IllegalArgumentException("account not found"));
 
         category category = categoryRepository.findById(dto.getCategory())

@@ -8,8 +8,9 @@ import java.util.Optional;
 
 public interface categoryRepository extends CrudRepository<category, Long> {
     List<category> findByType(String type);
-    List<category> findByTypeAndActiveTrue(String type);
+    List<category> findTop3ByTypeAndActiveTrue(String type);
     List<category> findTop3ByOrderByIdDesc();
     List<category> findByNameContainingIgnoreCase(String keyword);
+    List<category> findByTypeAndActiveTrue(String type);
 
 }

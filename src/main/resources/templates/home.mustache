@@ -69,14 +69,26 @@
             <!-- Categories -->
             <h5 class="mt-4">📂 Categories</h5>
             <div class="row">
-                {{#categories}}
+                <h6 class="mt-4">Expense</h6>
+                {{#expense}}
                     <div class="col-md-4 mb-3">
                         <div class="border p-2 rounded">
                             <strong>{{name}}</strong><br/>
                             Type: {{type}}<br/>
                         </div>
                     </div>
-                {{/categories}}
+                {{/expense}}
+            </div>
+            <div class="row">
+                <h6 class="mt-4">Income</h6>
+                {{#income}}
+                    <div class="col-md-4 mb-3">
+                        <div class="border p-2 rounded">
+                            <strong>{{name}}</strong><br/>
+                            Type: {{type}}<br/>
+                        </div>
+                    </div>
+                {{/income}}
             </div>
         </div>
     </div>

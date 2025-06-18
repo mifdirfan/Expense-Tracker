@@ -120,7 +120,7 @@
                 amount: parseFloat(amount),
                 date: date,
                 category: parseInt(category),
-                accountId: parseInt(accountId)
+                accounts: parseInt(accountId)
             };
 
             fetch("/incomes/add", {
@@ -237,7 +237,7 @@
 
                 const data = {
                     id,
-                    name,
+                    description,
                     amount: parseFloat(amount),
                     date: date,
                     category: parseInt(category),

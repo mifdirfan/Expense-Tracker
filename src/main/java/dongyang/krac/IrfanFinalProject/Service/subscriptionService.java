@@ -71,7 +71,7 @@ public class subscriptionService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0 2 * * *") // Runs daily at 2AM
+    @Scheduled(cron = "0 0 2 * * *") // Runs daily at 2AM | (cron = "*/1 * * * * *") for every second(testing)
     public void autoChargeSubscriptions() {
         LocalDate today = LocalDate.now();
 
